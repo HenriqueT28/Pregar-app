@@ -354,7 +354,7 @@ Poéticas, proféticas, curtas. JSON: [{"frase":"..."}]`, 700);
       <div className="hero">
         <div className="badge">✦ Cristocêntrico · NVI · Ilimitado</div>
         <h1>Pregue com <em>poder</em><br/>e transformação</h1>
-        <p>Sermões completos no estilo Renan Belas, Raik Carmelo e Luciano Subirá — com frases que marcam o coração.</p>
+        
       </div>
       <div className="card">
         <div className="grid2">
