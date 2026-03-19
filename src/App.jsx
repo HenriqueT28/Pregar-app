@@ -490,6 +490,7 @@ export default function App() {
     {id:"biblia", ic:"📖", label:"Bíblia"},
     {id:"devocional", ic:"🌅", label:"Devocional"},
     {id:"estudo", ic:"📚", label:"Estudo Bíblico"},
+    {id:"comoestou", ic:"🫀", label:"Como estou me sentindo"},
   ];
 
   return (
@@ -532,6 +533,7 @@ export default function App() {
             setPage("sermao");
             showToast("Abrindo gerador de estudo...");
           }}/></div>}
+          {page==="comoestou" && <div className="page"><ComoEstou/></div>}
           {page==="saved" && selSave && (
             <div className="page">
               <div className="out">
