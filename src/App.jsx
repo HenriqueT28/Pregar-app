@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import Login from "./Login";
 import Biblia from "./Biblia";
 import Devocional from "./Devocional";
 import Estudo from "./Estudo";
@@ -472,6 +473,8 @@ function Outline({ showToast }) {
 export default function App() {
   const [page, setPage] = useState("sermao");
   const [saves, setSaves] = useState(()=>{try{return JSON.parse(localStorage.getItem("pregar-saves")||"[]")}catch{return[]}});
+  const [user, setUser] = useState(() => { try { return JSON.parse(localStorage.getItem("pregar-user") || "null"); } catch { return null; } });
+  if (!user) return <Login onLogin={u => setUser(u)} />;
   const [toast, setToast] = useState("");
   const [selSave, setSelSave] = useState(null);
 
@@ -502,6 +505,15 @@ export default function App() {
             <div className="cross"/>
             <div className="brand">Pregar<span>.app</span></div>
           </div>
+              <div style={{padding:"10px 18px 12px",borderBottom:"1px solid var(--border)",background:"var(--surface)"}}>
+                <div style={{fontSize:10,fontWeight:600,letterSpacing:"0.08em",textTransform:"uppercase",color:"var(--muted)",marginBottom:2}}>
+                  {(()=>{const h=new Date().getHours();return h<12?"Bom dia":h<18?"Boa tarde":"Boa noite";})()}!
+                </div>
+                <div style={{fontSize:14,fontWeight:700,color:"var(--ink)",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                  <span>{user?.nome?.split(" ")[0]}</span>
+                  <button onClick={()=>{localStorage.removeItem("pregar-user");setUser(null);}} style={{fontSize:9,color:"var(--muted)",background:"none",border:"none",cursor:"pointer",fontFamily:"sans-serif",padding:0,opacity:0.6}}>sair</button>
+                </div>
+              </div>
           <div className="sb-body">
             <div className="sb-sec">Menu</div>
             {nav.map(n=>(
