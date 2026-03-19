@@ -211,6 +211,62 @@ function SermonGen({ saves, setSaves, showToast }) {
   );
 }
 function ThemeSugg({ showToast }) {
+  const [cat, setCat] = useState("");
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [items, setItems] = useState([]);
+  const cats = ["Família","Jovens","Páscoa","Natal","Evangelismo","Crise","Identidade","Missões","Batismo","Casamento"];
+  async function gen() {
+    const busca = query.trim() || cat;
+    if(!busca) return;
+    setLoading(true); setItems([]);
+    try {
+      const r = await aiJSON(PS, `Liste 8 temas de sermão únicos e poderosos para: ${busca}. Formato: [{"tema":"...","ref":"...","gancho":"frase de abertura impactante"}]`, 800);
+      if(r) setItems(r);
+    } catch(e) { showToast("Erro: "+e.message); }
+    setLoading(false);
+  }
+  return (
+    <div className="page">
+      <div className="f" style={{display:"grid",gap:14}}>
+        <div style={{display:"grid",gap:4}}>
+          <label>Buscar tema livre</label>
+          <input
+            value={query}
+            onChange={e=>setQuery(e.target.value)}
+            onKeyDown={e=>e.key==="Enter"&&gen()}
+            placeholder="Ex: ansiedade, família, propósito..."
+          />
+        </div>
+        <div style={{display:"grid",gap:6}}>
+          <label>Ou escolha uma categoria</label>
+          <div className="chips">
+            {cats.map(c=>(
+              <button key={c} className={`chip${cat===c?" on":""}`} onClick={()=>{setCat(c);setQuery("");}}>
+                {c}
+              </button>
+            ))}
+          </div>
+        </div>
+        <button className="btn" onClick={gen} disabled={(!cat&&!query.trim())||loading}>
+          {loading?<><div className="dots"><span/><span/><span/></div>Buscando...</>:"✦ Sugerir Temas"}
+        </button>
+      </div>
+      {loading && <div className="loader"><div className="ring"/><p>Buscando temas...</p></div>}
+      {items.length>0 && !loading && (
+        <div className="out" style={{display:"grid",gap:10}}>
+          {items.map((it,i)=>(
+            <div key={i} style={{background:"var(--surface)",borderRadius:10,padding:"14px 16px",border:"1px solid var(--border)"}}>
+              <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:18,fontWeight:700,marginBottom:3}}>{it.tema}</div>
+              <div style={{fontSize:11,color:"var(--gold)",fontWeight:600,marginBottom:6}}>{it.ref}</div>
+              <div style={{fontSize:13,color:"var(--ink2)",fontStyle:"italic",lineHeight:1.6}}>{it.gancho}</div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
   const [cat, setCat] = useState(""); const [loading, setLoading] = useState(false); const [items, setItems] = useState([]);
   const cats = ["Família","Jovens","Páscoa","Natal","Evangelismo","Crise","Identidade","Missões","Batismo","Casamento"];
   async function gen() {
