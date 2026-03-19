@@ -265,7 +265,6 @@ function ThemeSugg({ showToast }) {
         </div>
       )}
     </div>
-<<<<<<< HEAD
   );
 }
   const [cat, setCat] = useState(""); const [loading, setLoading] = useState(false); const [items, setItems] = useState([]);
@@ -278,9 +277,6 @@ function ThemeSugg({ showToast }) {
     } catch(e) { showToast("Erro: "+e.message); }
     setLoading(false);
   }
-=======
-  
->>>>>>> 4084e5621958970516b9563bf8b18821b7a8540e
 function VerseSearch({ showToast }) {
   const [q, setQ] = useState(""); const [loading, setLoading] = useState(false); const [res, setRes] = useState([]);
   async function search() {
