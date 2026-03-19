@@ -1,446 +1,370 @@
 import { useState, useEffect } from "react";
 
-// 365 referências cristocêntricas
-const REFS = [
-  {r:"Gênesis 1.1",t:"No princípio era Deus"},{r:"Gênesis 1.26-27",t:"Feitos à imagem de Deus"},
-  {r:"Gênesis 2.7",t:"O sopro que nos fez vivos"},{r:"Gênesis 3.15",t:"A primeira promessa do Redentor"},
-  {r:"Gênesis 12.1-3",t:"A fé que obedece sem ver"},{r:"Gênesis 15.6",t:"Crer é ser contado justo"},
-  {r:"Gênesis 22.8",t:"Deus proverá o cordeiro"},{r:"Gênesis 28.15",t:"Eu estou contigo"},
-  {r:"Gênesis 32.26",t:"Não te deixarei ir sem que me abençoes"},{r:"Gênesis 50.20",t:"O que era para o mal, Deus usou para o bem"},
-  {r:"Êxodo 3.14",t:"EU SOU O QUE SOU"},{r:"Êxodo 12.13",t:"O sangue será o sinal"},
-  {r:"Êxodo 14.14",t:"O Senhor combaterá por vós"},{r:"Êxodo 20.3",t:"Nenhum outro deus diante de Mim"},
-  {r:"Êxodo 33.14",t:"A minha presença irá contigo"},{r:"Levítico 17.11",t:"A vida está no sangue"},
-  {r:"Números 21.9",t:"A serpente levantada — Cristo prefigurado"},{r:"Deuteronômio 6.4-5",t:"Amarás o Senhor teu Deus"},
-  {r:"Deuteronômio 8.3",t:"Nem só de pão viverá o homem"},{r:"Deuteronômio 18.15",t:"O profeta que há de vir"},
-  {r:"Deuteronômio 31.6",t:"Forte e corajoso, pois Deus está contigo"},{r:"Josué 1.8",t:"Medita na lei dia e noite"},
-  {r:"Josué 24.15",t:"Quanto a mim e à minha casa"},{r:"1 Samuel 16.7",t:"O Senhor olha para o coração"},
-  {r:"1 Samuel 17.47",t:"A batalha pertence ao Senhor"},{r:"2 Samuel 7.12-13",t:"O trono eterno do Filho de Davi"},
-  {r:"1 Reis 18.21",t:"Até quando coxeareis entre dois pensamentos"},{r:"1 Reis 19.12",t:"A voz mansa e delicada"},
-  {r:"2 Reis 6.16",t:"Mais são os que estão conosco"},{r:"2 Crônicas 7.14",t:"Se o meu povo se humilhar"},
-  {r:"Neemias 8.10",t:"A alegria do Senhor é a vossa força"},{r:"Ester 4.14",t:"Para um tempo como este"},
-  {r:"Jó 1.21",t:"O Senhor deu, o Senhor tomou"},{r:"Jó 19.25",t:"Eu sei que o meu Redentor vive"},
-  {r:"Jó 38.4",t:"Onde estavas tu quando lancei os fundamentos"},{r:"Salmos 1.1-2",t:"Bem-aventurado o que medita na lei"},
-  {r:"Salmos 8.4",t:"Que é o homem para que te lembres dele"},{r:"Salmos 16.11",t:"Na tua presença há plenitude de alegria"},
-  {r:"Salmos 19.1",t:"Os céus proclamam a glória de Deus"},{r:"Salmos 22.1",t:"Por que me abandonaste"},
-  {r:"Salmos 23.1",t:"O Senhor é o meu pastor"},{r:"Salmos 27.1",t:"O Senhor é a minha luz e salvação"},
-  {r:"Salmos 32.1",t:"Bem-aventurado aquele cujo pecado é perdoado"},{r:"Salmos 34.18",t:"Perto dos que têm o coração quebrantado"},
-  {r:"Salmos 37.4",t:"Deleita-te no Senhor"},{r:"Salmos 42.1",t:"Como o cervo anseia pelas águas"},
-  {r:"Salmos 46.1",t:"Deus é o nosso refúgio e força"},{r:"Salmos 51.10",t:"Cria em mim um coração puro"},
-  {r:"Salmos 62.5",t:"A minha alma espera só em Deus"},{r:"Salmos 63.1",t:"Ó Deus, tu és o meu Deus"},
-  {r:"Salmos 73.25",t:"A quem tenho eu no céu senão a ti"},{r:"Salmos 84.10",t:"Melhor é um dia nos teus átrios"},
-  {r:"Salmos 90.12",t:"Ensina-nos a contar os nossos dias"},{r:"Salmos 91.1",t:"No esconderijo do Altíssimo"},
-  {r:"Salmos 103.12",t:"Removeu as transgressões para longe"},{r:"Salmos 110.1",t:"O Senhor disse ao meu Senhor"},
-  {r:"Salmos 119.11",t:"Escondi a tua palavra no meu coração"},{r:"Salmos 121.1-2",t:"O meu socorro vem do Senhor"},
-  {r:"Salmos 130.3-4",t:"Há perdão em ti"},{r:"Salmos 139.13-14",t:"Formidavelmente maravilhoso sou feito"},
-  {r:"Salmos 145.18",t:"Perto de todos os que o invocam"},{r:"Provérbios 3.5-6",t:"Confia no Senhor de todo o coração"},
-  {r:"Provérbios 4.23",t:"Guarda o teu coração"},{r:"Isaías 6.3",t:"Santo, santo, santo"},
-  {r:"Isaías 9.6",t:"Um filho nos foi dado"},{r:"Isaías 40.31",t:"Os que esperam no Senhor"},
-  {r:"Isaías 41.10",t:"Não temas, pois eu sou contigo"},{r:"Isaías 43.1",t:"Eu te resgatei, és meu"},
-  {r:"Isaías 43.25",t:"Eu mesmo apago as tuas transgressões"},{r:"Isaías 49.15-16",t:"Gravei-te nas palmas das minhas mãos"},
-  {r:"Isaías 53.3",t:"Desprezado e rejeitado pelos homens"},{r:"Isaías 53.5",t:"Ferido pelas nossas transgressões"},
-  {r:"Isaías 53.6",t:"Todos nós como ovelhas nos desviamos"},{r:"Isaías 55.1",t:"Vinde sem dinheiro e sem preço"},
-  {r:"Isaías 55.8-9",t:"Os meus pensamentos não são os vossos"},{r:"Isaías 61.1-2",t:"O Espírito do Senhor está sobre mim"},
-  {r:"Jeremias 1.5",t:"Antes de te formar no ventre te conheci"},{r:"Jeremias 17.9",t:"O coração é enganoso"},
-  {r:"Jeremias 29.11",t:"Planos de paz e não de calamidade"},{r:"Jeremias 31.3",t:"Amor eterno te amei"},
-  {r:"Jeremias 31.31-34",t:"A nova aliança"},{r:"Lamentações 3.22-23",t:"Novas são as tuas misericórdias"},
-  {r:"Ezequiel 36.26",t:"Darei a vós coração novo"},{r:"Ezequiel 37.3",t:"Podem reviver estes ossos?"},
-  {r:"Daniel 3.17-18",t:"Mesmo que não nos livre, não serviremos"},
-  {r:"Daniel 6.10",t:"Orava três vezes por dia"},{r:"Oseias 6.6",t:"Quero misericórdia e não sacrifício"},
-  {r:"Joel 2.28",t:"Derramarei o meu Espírito sobre toda carne"},{r:"Amós 3.7",t:"Deus nada faz sem revelar aos profetas"},
-  {r:"Miqueias 5.2",t:"De Belém sairá o governante"},{r:"Miqueias 6.8",t:"Fazer justiça, amar bondade e andar humildemente"},
-  {r:"Habacuque 2.4",t:"O justo viverá pela fé"},{r:"Sofonias 3.17",t:"O Senhor está no meio de ti"},
-  {r:"Malaquias 3.6",t:"Eu sou o Senhor, não mudo"},{r:"Mateus 1.23",t:"Emanuel, Deus conosco"},
-  {r:"Mateus 3.17",t:"Este é o meu Filho amado"},{r:"Mateus 4.4",t:"Nem só de pão viverá o homem"},
-  {r:"Mateus 5.3",t:"Bem-aventurados os pobres de espírito"},{r:"Mateus 5.8",t:"Bem-aventurados os puros de coração"},
-  {r:"Mateus 6.9-10",t:"Pai nosso que estás nos céus"},{r:"Mateus 6.33",t:"Buscai primeiro o Reino de Deus"},
-  {r:"Mateus 7.7",t:"Pedi e será dado"},{r:"Mateus 11.28",t:"Vinde a mim todos os que estais cansados"},
-  {r:"Mateus 16.16",t:"Tu és o Cristo, o Filho do Deus vivo"},{r:"Mateus 16.24",t:"Tome a sua cruz e siga-me"},
-  {r:"Mateus 18.20",t:"Onde dois ou três se reúnem em meu nome"},{r:"Mateus 22.37-39",t:"Amarás o Senhor teu Deus"},
-  {r:"Mateus 26.39",t:"Não seja o que eu quero, mas o que tu queres"},{r:"Mateus 28.18-20",t:"Toda autoridade me foi dada"},
-  {r:"Marcos 1.15",t:"O Reino de Deus está próximo, arrependei-vos"},{r:"Marcos 10.45",t:"Para servir e dar a vida em resgate"},
-  {r:"Lucas 1.37",t:"Nada é impossível para Deus"},{r:"Lucas 2.10-11",t:"Grandes novas de grande alegria"},
-  {r:"Lucas 4.18",t:"O Espírito do Senhor está sobre mim"},{r:"Lucas 15.20",t:"Ainda estava longe e o pai o viu"},
-  {r:"Lucas 19.10",t:"O Filho do Homem veio buscar e salvar"},{r:"Lucas 22.19",t:"Fazei isso em memória de mim"},
-  {r:"Lucas 23.34",t:"Pai, perdoa-lhes"},{r:"Lucas 24.6",t:"Não está aqui, ressuscitou"},
-  {r:"João 1.1",t:"No princípio era o Verbo"},{r:"João 1.14",t:"O Verbo se fez carne"},
-  {r:"João 1.29",t:"Eis o Cordeiro de Deus"},{r:"João 3.16",t:"Porque Deus amou o mundo"},
-  {r:"João 3.30",t:"É necessário que ele cresça"},
-  {r:"João 4.14",t:"Água que jorra para a vida eterna"},{r:"João 6.35",t:"Eu sou o pão da vida"},
-  {r:"João 8.12",t:"Eu sou a luz do mundo"},{r:"João 8.32",t:"A verdade vos libertará"},
-  {r:"João 8.36",t:"Se o Filho vos libertar"},{r:"João 10.10",t:"Vim para que tenham vida e a tenham em abundância"},
-  {r:"João 10.11",t:"Eu sou o bom pastor"},{r:"João 11.25",t:"Eu sou a ressurreição e a vida"},
-  {r:"João 13.34",t:"Amai-vos uns aos outros como eu vos amei"},{r:"João 14.1",t:"Não se turbe o vosso coração"},
-  {r:"João 14.6",t:"Eu sou o caminho, a verdade e a vida"},{r:"João 14.16-17",t:"O Consolador virá"},
-  {r:"João 15.5",t:"Eu sou a videira, vós os ramos"},{r:"João 15.13",t:"Amor maior do que este"},
-  {r:"João 16.33",t:"No mundo tereis tribulações, mas eu venci"},{r:"João 17.3",t:"A vida eterna é conhecer a Deus"},
-  {r:"João 19.30",t:"Está consumado"},{r:"João 20.28",t:"Senhor meu e Deus meu"},
-  {r:"Atos 1.8",t:"Recebereis poder quando o Espírito vier"},{r:"Atos 2.38",t:"Arrependei-vos e sede batizados"},
-  {r:"Atos 4.12",t:"Em nenhum outro há salvação"},{r:"Atos 16.31",t:"Crê no Senhor Jesus e serás salvo"},
-  {r:"Romanos 1.16",t:"Não me envergonho do evangelho"},{r:"Romanos 1.17",t:"O justo viverá pela fé"},
-  {r:"Romanos 3.23",t:"Todos pecaram e carecem da glória de Deus"},{r:"Romanos 3.24",t:"Justificados gratuitamente pela sua graça"},
-  {r:"Romanos 5.1",t:"Justificados pela fé, temos paz com Deus"},{r:"Romanos 5.8",t:"Deus prova o seu amor para conosco"},
-  {r:"Romanos 6.23",t:"O dom gratuito de Deus é a vida eterna"},{r:"Romanos 8.1",t:"Nenhuma condenação para os que estão em Cristo"},
-  {r:"Romanos 8.11",t:"O mesmo Espírito que ressuscitou Jesus vive em vós"},{r:"Romanos 8.28",t:"Todas as coisas cooperam para o bem"},
-  {r:"Romanos 8.31",t:"Se Deus é por nós, quem será contra nós"},{r:"Romanos 8.38-39",t:"Nada nos separará do amor de Deus"},
-  {r:"Romanos 10.9",t:"Confessa com a boca e crê no coração"},{r:"Romanos 10.17",t:"A fé vem pelo ouvir a palavra de Cristo"},
-  {r:"Romanos 12.1",t:"Ofereçais os vossos corpos em sacrifício vivo"},{r:"Romanos 12.2",t:"Não vos conformeis a este século"},
-  {r:"1 Coríntios 1.18",t:"A pregação da cruz é loucura aos que perecem"},{r:"1 Coríntios 1.30",t:"Cristo nos foi feito sabedoria"},
-  {r:"1 Coríntios 2.2",t:"Nada resolvi saber senão Jesus Cristo"},{r:"1 Coríntios 6.19-20",t:"Fostes comprados por bom preço"},
-  {r:"1 Coríntios 10.13",t:"Deus é fiel e não vos deixará ser tentados além do que podeis"},{r:"1 Coríntios 13.4-7",t:"O amor é paciente e bondoso"},
-  {r:"1 Coríntios 15.3-4",t:"Cristo morreu, foi sepultado e ressuscitou"},{r:"1 Coríntios 15.55",t:"Onde está, ó morte, o teu aguilhão"},
-  {r:"2 Coríntios 1.3-4",t:"Deus de toda consolação"},{r:"2 Coríntios 4.7",t:"Tesouros em vasos de barro"},
-  {r:"2 Coríntios 4.17",t:"A leve e momentânea tribulação"},{r:"2 Coríntios 5.17",t:"Nova criatura em Cristo"},
-  {r:"2 Coríntios 5.21",t:"O que não conheceu pecado, por nós foi feito pecado"},{r:"2 Coríntios 12.9",t:"A minha graça é suficiente para ti"},
-  {r:"Gálatas 2.20",t:"Já não sou eu que vivo, mas Cristo"},{r:"Gálatas 3.13",t:"Cristo nos resgatou da maldição da lei"},
-  {r:"Gálatas 5.1",t:"Para a liberdade Cristo nos libertou"},{r:"Efésios 1.3",t:"Abençoados com toda bênção espiritual"},
-  {r:"Efésios 1.7",t:"Temos a redenção pelo seu sangue"},{r:"Efésios 2.4-5",t:"Ricos em misericórdia, nos deu vida"},
-  {r:"Efésios 2.8-9",t:"Pela graça sois salvos mediante a fé"},{r:"Efésios 3.20",t:"Fazer muito mais do que pedimos ou pensamos"},
-  {r:"Efésios 4.22-24",t:"Renovai-vos no espírito da vossa mente"},{r:"Efésios 6.10-11",t:"Revesti-vos de toda a armadura de Deus"},
-  {r:"Filipenses 1.6",t:"O que começou a boa obra a completará"},{r:"Filipenses 2.5-8",t:"Tende em vós o sentimento de Cristo"},
-  {r:"Filipenses 3.10",t:"Conhecê-lo e o poder da sua ressurreição"},{r:"Filipenses 4.6-7",t:"Em tudo fazei as vossas petições conhecidas a Deus"},
-  {r:"Filipenses 4.11",t:"Aprendi a estar contente em todo estado"},{r:"Filipenses 4.13",t:"Tudo posso naquele que me fortalece"},
-  {r:"Colossenses 1.15",t:"Imagem do Deus invisível, primogênito"},{r:"Colossenses 1.27",t:"Cristo em vós, a esperança da glória"},
-  {r:"Colossenses 2.9-10",t:"Nele habita toda a plenitude da divindade"},{r:"Colossenses 3.1-2",t:"Buscai as coisas que são de cima"},
-  {r:"1 Tessalonicenses 5.16-18",t:"Regozijai-vos sempre, orai sem cessar"},{r:"2 Tessalonicenses 3.3",t:"O Senhor é fiel"},
-  {r:"1 Timóteo 1.15",t:"Cristo Jesus veio ao mundo para salvar pecadores"},{r:"1 Timóteo 2.5",t:"Um só Deus e um só mediador"},
-  {r:"2 Timóteo 1.7",t:"Deus não nos deu espírito de covardia"},{r:"2 Timóteo 3.16-17",t:"Toda Escritura é inspirada por Deus"},
-  {r:"Hebreus 1.1-2",t:"Deus nos falou pelo Filho"},{r:"Hebreus 4.15-16",t:"Um sumo sacerdote que se compadece"},
-  {r:"Hebreus 9.22",t:"Sem derramamento de sangue não há remissão"},{r:"Hebreus 10.19-22",t:"Temos ousadia para entrar no santuário"},
-  {r:"Hebreus 11.1",t:"A fé é a certeza do que se espera"},{r:"Hebreus 11.6",t:"Sem fé é impossível agradar a Deus"},
-  {r:"Hebreus 12.1-2",t:"Corramos com perseverança a carreira"},{r:"Hebreus 13.5",t:"Nunca te deixarei nem te abandonarei"},
-  {r:"Tiago 1.2-4",t:"Considerai motivo de grande alegria as provações"},{r:"Tiago 1.22",t:"Sede cumpridores da palavra"},
-  {r:"Tiago 4.8",t:"Chegai-vos a Deus e ele se chegará a vós"},{r:"1 Pedro 1.3",t:"Regeneração para uma esperança viva"},
-  {r:"1 Pedro 2.24",t:"Pelas suas chagas fostes sarados"},{r:"1 Pedro 5.7",t:"Lançai sobre ele toda a vossa ansiedade"},
-  {r:"2 Pedro 1.4",t:"Participantes da natureza divina"},{r:"1 João 1.9",t:"Se confessarmos nossos pecados, ele é fiel"},
-  {r:"1 João 3.1",t:"Vede que grande amor nos deu o Pai"},{r:"1 João 4.8",t:"Deus é amor"},
-  {r:"1 João 4.18",t:"O perfeito amor lança fora o temor"},{r:"1 João 5.11-12",t:"Quem tem o Filho tem a vida"},
-  {r:"Apocalipse 1.8",t:"Eu sou o Alfa e o Ômega"},{r:"Apocalipse 3.20",t:"Estou à porta e bato"},
-  {r:"Apocalipse 5.9",t:"Digno és de tomar o livro"},{r:"Apocalipse 19.16",t:"Rei dos reis e Senhor dos senhores"},
-  {r:"Apocalipse 21.3-4",t:"Deus habitará com os homens"},{r:"Apocalipse 21.5",t:"Eis que faço novas todas as coisas"},
-  {r:"Apocalipse 22.13",t:"Eu sou o Alfa e o Ômega, o primeiro e o último"},
-  // Dias extras para completar 365
-  {r:"Salmos 2.7",t:"Tu és meu Filho, eu hoje te gerei"},
-  {r:"Salmos 16.10",t:"Não abandonarás a minha alma no além"},
-  {r:"Salmos 118.22",t:"A pedra que os construtores rejeitaram"},
-  {r:"Salmos 118.24",t:"Este é o dia que o Senhor fez"},
-  {r:"Isaías 25.8",t:"Devorará a morte para sempre"},
-  {r:"Ezequiel 18.23",t:"Não quero a morte do ímpio, mas que se converta"},
-  {r:"Miqueias 7.18",t:"Quem é Deus como tu, que perdoa a iniquidade"},
-  {r:"Zacarias 9.9",t:"Eis que te vem o teu rei, justo e salvador"},
-  {r:"Mateus 5.14",t:"Vós sois a luz do mundo"},
-  {r:"Mateus 9.36",t:"Vendo as multidões, compadeceu-se delas"},
-  {r:"Marcos 4.39",t:"Aquieta-te, cala-te"},
-  {r:"Marcos 9.24",t:"Creio, ajuda a minha incredulidade"},
-  {r:"Lucas 1.45",t:"Bem-aventurada a que creu"},
-  {r:"Lucas 7.47",t:"São perdoados os seus muitos pecados"},
-  {r:"Lucas 10.27",t:"Amarás o Senhor teu Deus com todo o teu coração"},
-  {r:"João 12.24",t:"Se o grão de trigo não cair na terra e morrer"},
-  {r:"João 13.35",t:"Nisso todos conhecerão que sois meus discípulos"},
-  {r:"João 20.29",t:"Bem-aventurados os que não viram e creram"},
-  {r:"Atos 3.19",t:"Arrependei-vos e convertei-vos"},
-  {r:"Atos 13.38-39",t:"Por meio dele é anunciada a remissão dos pecados"},
-  {r:"Romanos 4.5",t:"A fé lhe é imputada como justiça"},
-  {r:"Romanos 6.4",t:"Sepultados com Cristo pelo batismo"},
-  {r:"Romanos 11.33",t:"Ó profundidade das riquezas da sabedoria de Deus"},
-  {r:"1 Coríntios 3.11",t:"Ninguém pode pôr outro fundamento senão Cristo"},
-  {r:"2 Coríntios 3.18",t:"Transformados de glória em glória"},
-  {r:"Gálatas 4.4-5",t:"No cumprimento dos tempos, Deus enviou seu Filho"},
-  {r:"Efésios 3.17-19",t:"Que Cristo habite nos vossos corações pela fé"},
-  {r:"Efésios 5.25-27",t:"Cristo amou a Igreja e a si mesmo se entregou"},
-  {r:"Colossenses 3.16",t:"A palavra de Cristo habite ricamente em vós"},
-  {r:"1 Timóteo 3.16",t:"Grande é o mistério da piedade"},
-  {r:"Hebreus 2.14-15",t:"Participou da carne e do sangue para destruir a morte"},
-  {r:"Hebreus 7.25",t:"Pode salvar totalmente os que por ele se aproximam"},
-  {r:"1 Pedro 1.18-19",t:"Resgatados com o precioso sangue de Cristo"},
-  {r:"2 Pedro 3.9",t:"O Senhor não retarda a sua promessa"},
-  {r:"Judas 24",t:"Aquele que é poderoso para vos guardar"},
-  {r:"Apocalipse 7.17",t:"O Cordeiro os apascentará"},
-  {r:"Apocalipse 12.11",t:"Venceram pelo sangue do Cordeiro"},
-];
+// Palavras hebraicas com tooltip — aparecem nas reflexões
+const HWORDS = {
+  "chesed":{heb:"חֶסֶד",tr:"ḥe·sed",def:"Amor leal e inabalável, fidelidade de aliança — vai muito além de 'misericórdia'"},
+  "shalom":{heb:"שָׁלוֹם",tr:"šā·lôm",def:"Paz completa, integridade, bem-estar total — não apenas ausência de conflito"},
+  "emunah":{heb:"אֱמוּנָה",tr:"ʾĕ·mû·nāh",def:"Fé firme, fidelidade constante — a mesma raiz de 'Amém'"},
+  "bara":{heb:"בָּרָא",tr:"bā·rāʾ",def:"Criar do absoluto nada — verbo usado EXCLUSIVAMENTE com Deus como sujeito"},
+  "nephesh":{heb:"נֶפֶשׁ",tr:"ne·feš",def:"Alma, ser vivo, pessoa inteira — não apenas a parte espiritual, mas todo o ser"},
+  "YHWH":{heb:"יְהוָה",tr:"Yah·weh",def:"O nome próprio de Deus — o Ser eterno, autoexistente, EU SOU O QUE SOU"},
+  "elohim":{heb:"אֱלֹהִים",tr:"ʾĕ·lō·hîm",def:"Deus — plural de majestade, antecipando a revelação trinitária"},
+  "hesed":{heb:"חֶסֶד",tr:"ḥe·sed",def:"Amor leal de aliança — Deus nunca abandona quem Ele escolheu"},
+  "ruach":{heb:"רוּחַ",tr:"rû·aḥ",def:"Espírito, vento, fôlego — o Espírito de Deus que paira sobre o caos"},
+  "yeshua":{heb:"יֵשׁוּעַ",tr:"yê·šûaʿ",def:"Jesus — literalmente 'YHWH salva', o nome que contém a missão"},
+  "kabod":{heb:"כָּבוֹד",tr:"kā·ḇôḏ",def:"Glória, peso, honra — a presença visível e tangível de Deus"},
+  "dabar":{heb:"דָּבָר",tr:"dā·ḇār",def:"Palavra, coisa, evento — a Palavra de Deus que cria realidade"},
+  "agape":{heb:"אַהֲבָה",tr:"ʾa·hă·ḇāh",def:"Amor incondicional — Deus ama não pelo que somos mas pelo que Ele é"},
+  "ahavah":{heb:"אַהֲבָה",tr:"ʾa·hă·ḇāh",def:"Amor — a escolha deliberada de Deus por você antes de você existir"},
+  "berith":{heb:"בְּרִית",tr:"bə·rîṯ",def:"Aliança — compromisso irrevogável de Deus, não depende do seu desempenho"},
+  "kadosh":{heb:"קָדוֹשׁ",tr:"qā·ḏôš",def:"Santo, separado, diferente de tudo — a natureza fundamental de Deus"},
+  "nasa":{heb:"נָשָׂא",tr:"nā·śāʾ",def:"Carregar, perdoar, levantar — Deus carrega o peso dos nossos pecados"},
+  "emet":{heb:"אֱמֶת",tr:"ʾĕ·meṯ",def:"Verdade, fidelidade, confiabilidade — Deus é incapaz de mentir"},
+  "tsaddik":{heb:"צַדִּיק",tr:"ṣad·dîq",def:"Justo — a justiça que Deus nos credita por causa de Cristo"},
+  "kaphar":{heb:"כָּפַר",tr:"kā·p̄ar",def:"Cobrir, expiar — raiz de Yom Kippur, o dia que Cristo cumpriu definitivamente"},
+};
 
-const DIAS_SEMANA = ["Domingo","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado"];
-const MESES = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
-
-// Data base: 1 Jan 2026 = Dia 1
-const BASE = new Date(2026, 0, 1);
-
-function getDayIndex() {
-  const hoje = new Date();
-  const hojeZero = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
-  const diff = Math.floor((hojeZero - BASE) / 86400000);
-  return Math.max(0, diff % 365);
-}
-
-function dateFromIndex(idx) {
-  const d = new Date(BASE);
-  d.setDate(d.getDate() + idx);
-  return d;
-}
-
-function formatDate(d) {
-  const dia = String(d.getDate()).padStart(2,'0');
-  const mes = String(d.getMonth()+1).padStart(2,'0');
-  const ano = String(d.getFullYear()).slice(-2);
-  return `${dia}/${mes}/${ano}`;
-}
-
-function formatDateFull(d) {
-  return `${DIAS_SEMANA[d.getDay()]}, ${d.getDate()} de ${MESES[d.getMonth()]} de ${d.getFullYear()}`;
-}
-
-async function ai(system, user) {
-  const r = await fetch("/api/chat", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      model:"claude-sonnet-4-20250514",
-      max_tokens:1800,
-      system,
-      messages:[{role:"user",content:user}]
-    })
-  });
-  const d = await r.json();
-  if(d.error) throw new Error(d.error.message);
-  return d.content?.[0]?.text || "";
-}
-
-const SYSTEM = `Você é um pastor-teólogo cristocêntrico de altíssimo nível espiritual. Gere um devocional profundo, impactante e transformador. Regras:
-- SEMPRE centralize tudo em Cristo — ele é a resposta de cada texto
-- Use profundidade exegética real: cite o hebraico/grego original quando relevante, com a palavra entre asteriscos ex: *shalom* e seu significado entre colchetes [paz completa, inteireza]
-- Reflexão de pelo menos 4 parágrafos: contexto histórico, significado profundo, aplicação cristocêntrica, desafio pessoal
-- Oração poderosa e específica ao tema
-- Uma aplicação prática transformadora
-- Linguagem: profunda mas acessível, que toque o coração
-- Retorne APENAS JSON válido sem markdown: {"reflexao":"...","oracao":"...","aplicacao":"...","versiculo":"versículo completo em NVI"}`;
-
-// Tooltip de palavras hebraicas/gregas
-function HebrewTooltip({ word, meaning }) {
+// Tooltip para palavras hebraicas
+function HebrewWord({ word, data }) {
   const [open, setOpen] = useState(false);
   return (
     <span style={{position:"relative",display:"inline"}}>
       <span
+        onClick={()=>setOpen(o=>!o)}
         onMouseEnter={()=>setOpen(true)}
         onMouseLeave={()=>setOpen(false)}
-        onClick={()=>setOpen(o=>!o)}
         style={{
-          color:"var(--gold)",fontWeight:600,cursor:"pointer",
-          borderBottom:"1.5px solid var(--gold)",fontStyle:"italic"
+          color:"var(--gold)",
+          fontWeight:600,
+          borderBottom:"2px solid var(--gold)",
+          cursor:"pointer",
+          fontStyle:"italic",
         }}
-      >
-        {word}
-      </span>
+      >{word}</span>
       {open && (
         <span style={{
           position:"fixed",
           top:"50%",left:"50%",
           transform:"translate(-50%,-50%)",
+          width:300,
           background:"var(--white,#fff)",
-          border:"1.5px solid var(--gold-border,rgba(184,145,42,0.3))",
+          border:"1.5px solid var(--gold,#B8912A)",
           borderRadius:14,
           padding:"16px 18px",
-          width:280,
           zIndex:9999,
-          boxShadow:"0 16px 48px rgba(0,0,0,0.18)",
-          textAlign:"center",
-          pointerEvents:"none",
+          boxShadow:"0 12px 40px rgba(0,0,0,0.18)",
+          fontSize:13,
+          lineHeight:1.6,
+          fontStyle:"normal",
+          fontFamily:"'DM Sans',sans-serif",
         }}>
-          <div style={{fontSize:28,fontFamily:"serif",color:"var(--ink,#17160F)",marginBottom:6,lineHeight:1.3,direction:"rtl"}}>{meaning.heb}</div>
-          <div style={{fontSize:12,fontWeight:600,color:"var(--gold,#B8912A)",marginBottom:8,fontStyle:"normal"}}>{word} · {meaning.h}</div>
-          <div style={{fontSize:13,color:"var(--ink2,#3D3C35)",lineHeight:1.6,marginBottom:6}}>{meaning.sig}</div>
-          <div style={{fontSize:11,color:"var(--muted,#8A8980)",fontStyle:"italic",lineHeight:1.5}}>{meaning.ex}</div>
+          <div style={{fontSize:28,fontFamily:"serif",direction:"rtl",textAlign:"center",color:"var(--ink,#17160F)",marginBottom:8,lineHeight:1.3}}>{data.heb}</div>
+          <div style={{textAlign:"center",fontSize:13,color:"var(--muted,#8A8980)",marginBottom:10,fontStyle:"italic"}}>{data.tr}</div>
+          <div style={{background:"rgba(184,145,42,0.08)",borderRadius:8,padding:"10px 12px",fontSize:13,color:"var(--ink,#17160F)",lineHeight:1.65,borderLeft:"3px solid var(--gold,#B8912A)"}}>{data.def}</div>
+          <div style={{fontSize:10,color:"var(--muted)",textAlign:"center",marginTop:8}}>Clique fora para fechar</div>
         </span>
       )}
     </span>
   );
 }
 
-// Renderiza texto substituindo *palavra* [significado] por tooltips
-const HEBREW_DB = {
-  "shalom":{heb:"שָׁלוֹם",h:"H7965",sig:"Paz completa, inteireza, bem-estar total — muito mais que ausência de conflito",ex:"Nm 6.26 — O Senhor levante sobre ti a sua face e te dê shalom"},
-  "hesed":{heb:"חֶסֶד",h:"H2617",sig:"Amor leal, misericórdia da aliança — amor que nunca desiste, nunca falha",ex:"Sl 136 — A sua hesed dura para sempre (repetido 26 vezes)"},
-  "bara":{heb:"בָּרָא",h:"H1254",sig:"Criar do nada — verbo usado exclusivamente com Deus como sujeito",ex:"Gn 1.1 — No princípio Deus bara os céus e a terra"},
-  "emunah":{heb:"אֱמוּנָה",h:"H530",sig:"Fidelidade, firmeza — a fé bíblica é confiança baseada em caráter provado",ex:"Hc 2.4 — O justo viverá pela sua emunah"},
-  "yada":{heb:"יָדַע",h:"H3045",sig:"Conhecer intimamente — não informação, mas relacionamento experiencial profundo",ex:"Jr 1.5 — Antes de te formar no ventre te yada"},
-  "ruach":{heb:"רוּחַ",h:"H7307",sig:"Espírito, vento, sopro — a presença ativa e poderosa de Deus",ex:"Gn 1.2 — O ruach de Deus se movia sobre as águas"},
-  "kadosh":{heb:"קָדוֹשׁ",h:"H6918",sig:"Santo, separado, completamente diferente — Deus é radicalmente outro",ex:"Is 6.3 — Kadosh, kadosh, kadosh é o Senhor dos Exércitos"},
-  "agape":{heb:"ἀγάπη",h:"G26",sig:"Amor incondicional, sacrificial — o amor que age pelo bem do outro independente de mérito",ex:"Jo 3.16 — Deus tanto agapao o mundo que deu seu Filho unigênito"},
-  "grace":{heb:"χάρις",h:"G5485",sig:"Graça — favor imerecido, presente não comprado, amor que vai além da justiça",ex:"Ef 2.8 — Pela charis sois salvos mediante a fé"},
-  "logos":{heb:"λόγος",h:"G3056",sig:"Palavra, razão, sentido — em João, a revelação completa e pessoal de Deus",ex:"Jo 1.1 — No princípio era o logos, e o logos estava com Deus"},
-  "emet":{heb:"אֱמֶת",h:"H571",sig:"Verdade, fidelidade, realidade — aquilo que é sólido, no qual se pode confiar",ex:"Jo 14.6 — Eu sou o caminho, a emet e a vida"},
-  "nasa":{heb:"נָשָׂא",h:"H5375",sig:"Carregar, suportar, perdoar — literalmente levantar e remover o peso do pecado",ex:"Is 53.4 — Certamente ele nasa as nossas enfermidades"},
-  "psuche":{heb:"ψυχή",h:"G5590",sig:"Alma, vida, ser interior — a essência da pessoa, o eu profundo que só Deus pode satisfazer",ex:"Mt 11.28 — Descansarei as vossas psuchai"},
-};
-
-function renderReflexao(text) {
+// Renderiza texto com palavras hebraicas clicáveis
+function renderText(text) {
   if (!text) return null;
-  const parts = [];
-  const regex = /\*(\w+)\*\s*\[([^\]]+)\]/g;
-  let last = 0; let key = 0; let m;
-  const str = text;
-  const matches = [];
-  let match;
-  while ((match = regex.exec(str)) !== null) matches.push(match);
-  
-  for (const m of matches) {
-    if (m.index > last) parts.push(<span key={key++}>{str.slice(last, m.index)}</span>);
-    const word = m[1];
-    const dbKey = word.toLowerCase();
-    if (HEBREW_DB[dbKey]) {
-      parts.push(<HebrewTooltip key={key++} word={word} meaning={HEBREW_DB[dbKey]} />);
-    } else {
-      parts.push(<span key={key++} style={{color:"var(--gold)",fontWeight:600,fontStyle:"italic"}}>{word} <span style={{fontSize:11,color:"var(--muted)"}}>[{m[2]}]</span></span>);
-    }
-    last = m.index + m[0].length;
-  }
-  if (last < str.length) parts.push(<span key={key++}>{str.slice(last)}</span>);
-  return parts.length > 0 ? parts : text;
+  const pattern = new RegExp('(' + Object.keys(HWORDS).join('|') + ')', 'gi');
+  const parts = text.split(pattern);
+  return parts.map((part, i) => {
+    const key = part.toLowerCase();
+    if (HWORDS[key]) return <HebrewWord key={i} word={part} data={HWORDS[key]} />;
+    return <span key={i}>{part}</span>;
+  });
 }
 
+// Gera data real a partir do dia do ano (1-365) e ano atual
+function getDateFromDay(dayNum) {
+  const year = new Date().getFullYear();
+  const date = new Date(year, 0);
+  date.setDate(dayNum);
+  return date.toLocaleDateString("pt-BR", { day:"2-digit", month:"2-digit", year:"2-digit" });
+}
+
+function getTodayDayNum() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  return Math.floor((now - start) / 86400000);
+}
+
+const STORAGE_KEY = "pregar-devocionais-v2";
+
+function loadCache() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch { return {}; }
+}
+function saveCache(cache) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(cache)); } catch {}
+}
+
+// System prompt do pastor
+const PS = `Você é um pastor-teólogo cristocêntrico de profundidade extraordinária.
+Combine a exegese profunda de John Piper, o fogo profético de Raik Carmelo, a clareza de Luciano Subirá e a narrativa poética de Renan Belas.
+
+REGRAS ABSOLUTAS:
+- Cristo é sempre o centro e o ponto de chegada de tudo
+- Use a versão NVI
+- Inclua OBRIGATORIAMENTE 2 a 3 palavras em hebraico/grego no corpo da reflexão (ex: chesed, shalom, YHWH, emunah, bara, nephesh, yeshua, kabod, dabar, ahavah, berith, kadosh)
+- Escreva com impacto espiritual real — que mude a manhã da pessoa
+- Reflexão com pelo menos 3 parágrafos densos e impactantes
+- Oração pessoal e íntima, como se Deus estivesse na sala
+- Aplicação concreta e desafiadora
+
+Retorne APENAS JSON válido, sem markdown:
+{
+  "titulo": "...",
+  "versiculo": "texto completo NVI",
+  "reflexao": "3+ parágrafos profundos com palavras hebraicas naturalmente integradas no texto",
+  "oracao": "oração íntima e pessoal",
+  "aplicacao": "desafio concreto e impactante para o dia"
+}`;
+
 export default function Devocional() {
-  const [dayIdx, setDayIdx] = useState(getDayIndex);
+  const todayNum = getTodayDayNum();
+  const [dia, setDia] = useState(todayNum);
   const [dev, setDev] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const ref = REFS[dayIdx % REFS.length];
-  const date = dateFromIndex(dayIdx);
-  const todayIdx = getDayIndex();
-  const isToday = dayIdx === todayIdx;
+  const REFS = [
+    "Gênesis 1.1","Gênesis 1.26-27","Gênesis 2.7","Gênesis 3.15","Gênesis 12.1-3",
+    "Gênesis 15.6","Gênesis 22.8","Gênesis 28.15","Gênesis 32.28","Gênesis 50.20",
+    "Êxodo 3.14","Êxodo 12.13","Êxodo 14.14","Êxodo 16.4","Êxodo 20.3",
+    "Êxodo 33.14","Levítico 17.11","Números 21.9","Deuteronômio 6.4-5","Deuteronômio 8.3",
+    "Deuteronômio 18.15","Deuteronômio 31.6","Josué 1.8","Josué 24.15","Juízes 6.12",
+    "Rute 1.16","1 Samuel 16.7","1 Samuel 17.47","2 Samuel 7.12-13","1 Reis 19.12",
+    "2 Reis 6.16","1 Crônicas 16.11","2 Crônicas 7.14","Esdras 7.10","Neemias 8.10",
+    "Ester 4.14","Jó 1.21","Jó 19.25","Jó 38.4","Salmos 1.1-2",
+    "Salmos 8.4","Salmos 16.11","Salmos 19.1","Salmos 22.1","Salmos 23.1",
+    "Salmos 27.1","Salmos 32.1","Salmos 34.18","Salmos 37.4","Salmos 42.1",
+    "Salmos 46.1","Salmos 51.10","Salmos 62.5","Salmos 63.1","Salmos 73.25",
+    "Salmos 84.10","Salmos 90.12","Salmos 91.1","Salmos 103.12","Salmos 110.1",
+    "Salmos 119.11","Salmos 121.1-2","Salmos 130.3-4","Salmos 139.13-14","Salmos 145.18",
+    "Provérbios 3.5-6","Provérbios 4.23","Provérbios 16.9","Eclesiastes 3.11","Eclesiastes 12.13",
+    "Isaías 6.3","Isaías 6.8","Isaías 7.14","Isaías 9.6","Isaías 40.31",
+    "Isaías 41.10","Isaías 43.1","Isaías 43.25","Isaías 49.16","Isaías 52.7",
+    "Isaías 53.3","Isaías 53.5","Isaías 53.6","Isaías 55.1","Isaías 55.8-9",
+    "Isaías 61.1-2","Isaías 64.6","Jeremias 1.5","Jeremias 17.9","Jeremias 29.11",
+    "Jeremias 31.3","Jeremias 31.31-34","Ezequiel 36.26","Ezequiel 37.4","Daniel 3.17-18",
+    "Daniel 6.22","Oséias 11.1","Joel 2.28","Amós 3.7","Jonas 2.9",
+    "Miquéias 6.8","Habacuque 3.17-18","Sofonias 3.17","Malaquias 3.10","Mateus 1.21",
+    "Mateus 4.4","Mateus 5.3","Mateus 5.8","Mateus 6.9-10","Mateus 6.33",
+    "Mateus 11.28-30","Mateus 16.24","Mateus 16.26","Mateus 18.20","Mateus 22.37-39",
+    "Mateus 28.18-20","Marcos 1.15","Marcos 8.34","Marcos 10.45","Lucas 1.37",
+    "Lucas 4.18","Lucas 9.23","Lucas 10.27","Lucas 15.20","Lucas 19.10",
+    "Lucas 22.42","Lucas 23.34","João 1.1","João 1.14","João 1.29",
+    "João 3.3","João 3.16","João 4.14","João 6.35","João 6.44",
+    "João 8.12","João 8.32","João 8.36","João 10.10","João 10.28-29",
+    "João 11.25-26","João 13.34-35","João 14.1-3","João 14.6","João 14.27",
+    "João 15.4-5","João 15.13","João 16.33","João 17.3","João 19.30",
+    "João 20.28","Atos 1.8","Atos 2.38","Atos 4.12","Atos 17.28",
+    "Romanos 1.16","Romanos 3.23","Romanos 3.24","Romanos 5.1","Romanos 5.8",
+    "Romanos 6.4","Romanos 6.23","Romanos 8.1","Romanos 8.11","Romanos 8.28",
+    "Romanos 8.31-32","Romanos 8.38-39","Romanos 10.9","Romanos 12.1-2","Romanos 15.13",
+    "1 Coríntios 1.18","1 Coríntios 1.30","1 Coríntios 2.2","1 Coríntios 6.19-20","1 Coríntios 10.13",
+    "1 Coríntios 13.4-7","1 Coríntios 15.3-4","1 Coríntios 15.20","1 Coríntios 15.55-57","2 Coríntios 1.3-4",
+    "2 Coríntios 3.18","2 Coríntios 4.17","2 Coríntios 5.17","2 Coríntios 5.21","2 Coríntios 12.9",
+    "Gálatas 2.20","Gálatas 3.13","Gálatas 5.1","Gálatas 5.22-23","Efésios 1.4-5",
+    "Efésios 1.7","Efésios 2.4-5","Efésios 2.8-9","Efésios 2.10","Efésios 3.20",
+    "Efésios 4.32","Efésios 6.10-12","Filipenses 1.6","Filipenses 2.5-8","Filipenses 3.8",
+    "Filipenses 4.6-7","Filipenses 4.11","Filipenses 4.13","Colossenses 1.15-17","Colossenses 1.27",
+    "Colossenses 2.9-10","Colossenses 3.1-3","1 Tessalonicenses 5.16-18","2 Tessalonicenses 3.3","1 Timóteo 1.15",
+    "1 Timóteo 2.5","1 Timóteo 4.8","2 Timóteo 1.7","2 Timóteo 2.13","2 Timóteo 3.16-17",
+    "Tito 2.11-12","Tito 3.5","Filemom 1.15-16","Hebreus 1.1-2","Hebreus 2.14-15",
+    "Hebreus 4.12","Hebreus 4.15-16","Hebreus 7.25","Hebreus 9.14","Hebreus 10.14",
+    "Hebreus 11.1","Hebreus 11.6","Hebreus 12.1-2","Hebreus 12.6","Hebreus 13.5-6",
+    "Tiago 1.2-4","Tiago 1.17","Tiago 4.8","1 Pedro 1.3-4","1 Pedro 1.18-19",
+    "1 Pedro 2.9","1 Pedro 2.24","1 Pedro 5.7","1 Pedro 5.8-9","2 Pedro 1.3-4",
+    "2 Pedro 3.9","1 João 1.7","1 João 1.9","1 João 2.1-2","1 João 3.1",
+    "1 João 4.8","1 João 4.10","1 João 4.18","1 João 5.11-12","Judas 1.24-25",
+    "Apocalipse 1.17-18","Apocalipse 3.20","Apocalipse 5.9","Apocalipse 12.11","Apocalipse 21.3-4",
+    "Apocalipse 22.17","Salmos 27.4","Salmos 31.15","Salmos 36.7","Salmos 40.1-3",
+    "Salmos 55.22","Salmos 68.5","Salmos 86.5","Salmos 94.19","Salmos 107.9",
+    "Salmos 116.15","Salmos 126.5-6","Salmos 138.3","Salmos 147.3","Isaías 26.3",
+  ];
 
-  // Checa se virou meia-noite
-  useEffect(() => {
-    const check = setInterval(() => {
-      const newIdx = getDayIndex();
-      if (newIdx !== todayIdx) window.location.reload();
-    }, 60000);
-    return () => clearInterval(check);
-  }, [todayIdx]);
+  const ref = REFS[(dia - 1) % REFS.length];
+  const dateLabel = getDateFromDay(dia);
+  const progress = Math.round((dia / 365) * 100);
 
-  // Carrega do cache ou gera
-  useEffect(() => {
-    const key = `dev-${dayIdx}`;
-    const cached = localStorage.getItem(key);
-    if (cached) { try { setDev(JSON.parse(cached)); return; } catch {} }
-    generate(dayIdx);
-  }, [dayIdx]);
-
-  async function generate(idx) {
-    setLoading(true); setError(""); setDev(null);
+  async function gerarDevocional(d) {
+    setLoading(true);
+    setError("");
+    const cache = loadCache();
+    if (cache[d]) { setDev(cache[d]); setLoading(false); return; }
+    const r = REFS[(d - 1) % REFS.length];
     try {
-      const r = REFS[idx % REFS.length];
-      const prompt = `Gere um devocional cristocêntrico profundo para o dia ${idx+1}/365.
-Referência: ${r.r} — "${r.t}"
-Data: ${formatDateFull(dateFromIndex(idx))}
-
-Inclua pelo menos 2 palavras em hebraico/grego original no formato *palavra* [tradução literal] dentro da reflexão.
-A reflexão deve ter 4 parágrafos profundos que transformem o leitor.`;
-      const raw = await ai(SYSTEM, prompt);
-      const clean = raw.replace(/```json|```/g,"").trim();
+      const resp = await fetch("/api/chat", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({
+          model:"claude-sonnet-4-20250514",
+          max_tokens:1800,
+          system: PS,
+          messages:[{role:"user",content:`Gere o devocional do DIA ${d} de 365, baseado em: ${r}. Seja profundo, cristocêntrico e impactante. Integre naturalmente 2-3 palavras hebraicas no corpo da reflexão.`}]
+        })
+      });
+      const data = await resp.json();
+      if (data.error) throw new Error(data.error.message || "Erro na API");
+      const text = data.content?.[0]?.text || "";
+      const clean = text.replace(/```json|```/g,"").trim();
       const parsed = JSON.parse(clean);
-      localStorage.setItem(`dev-${idx}`, JSON.stringify(parsed));
+      cache[d] = parsed;
+      saveCache(cache);
       setDev(parsed);
-    } catch(e) { setError("Erro ao gerar: " + e.message); }
+    } catch(e) {
+      setError("Erro ao gerar: " + e.message);
+    }
     setLoading(false);
   }
 
-  const progresso = Math.round(((dayIdx+1)/365)*100);
+  useEffect(() => { gerarDevocional(dia); }, [dia]);
+
+  function navDia(delta) {
+    const next = Math.min(365, Math.max(1, dia + delta));
+    setDia(next);
+    setDev(null);
+  }
+
+  const isToday = dia === todayNum;
 
   return (
-    <div style={{padding:"0 4px",maxWidth:680}}>
-      {/* Header com navegação */}
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}>
-        <button
-          onClick={()=>setDayIdx(i=>Math.max(0,i-1))}
-          disabled={dayIdx===0}
-          style={{width:36,height:36,borderRadius:"50%",border:"1.5px solid var(--border)",background:"none",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",color:dayIdx===0?"var(--border)":"var(--ink)",transition:"all .15s"}}
-        >←</button>
+    <div style={{padding:"0 4px",maxWidth:680,margin:"0 auto"}}>
 
-        <div style={{textAlign:"center"}}>
-          <div style={{display:"flex",alignItems:"center",gap:8,justifyContent:"center",marginBottom:2}}>
-            <span style={{background:"rgba(30,64,53,0.1)",color:"var(--green,#1E4035)",fontSize:12,fontWeight:600,padding:"3px 10px",borderRadius:10}}>
-              Dia {dayIdx+1} de 365
-            </span>
-            {isToday && <span style={{background:"var(--gold-bg)",color:"var(--gold)",fontSize:10,fontWeight:600,padding:"2px 8px",borderRadius:10}}>HOJE</span>}
+      {/* Header com data e navegação */}
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16,gap:12}}>
+        <button onClick={()=>navDia(-1)} disabled={dia<=1} style={{
+          width:36,height:36,borderRadius:"50%",border:"1.5px solid var(--border)",
+          background:"var(--surface)",cursor:"pointer",display:"flex",alignItems:"center",
+          justifyContent:"center",fontSize:16,color:"var(--ink)",flexShrink:0,
+          opacity:dia<=1?0.3:1,transition:"all .2s",
+        }}>‹</button>
+
+        <div style={{textAlign:"center",flex:1}}>
+          <div style={{
+            display:"inline-flex",alignItems:"center",gap:8,
+            background:"var(--gold-bg)",border:"1px solid var(--gold-border)",
+            borderRadius:20,padding:"4px 14px",marginBottom:4,
+          }}>
+            <span style={{fontSize:11,fontWeight:600,color:"var(--gold)"}}>Dia {dia} de 365</span>
+            {isToday && <span style={{fontSize:10,background:"var(--gold)",color:"#fff",borderRadius:10,padding:"1px 6px",fontWeight:600}}>HOJE</span>}
           </div>
-          <div style={{fontSize:13,fontWeight:600,color:"var(--ink)",letterSpacing:"0.03em"}}>{formatDate(date)}</div>
-          <div style={{fontSize:11,color:"var(--muted)",marginTop:1}}>{formatDateFull(date)}</div>
+          <div style={{fontSize:13,fontWeight:600,color:"var(--ink)",letterSpacing:"0.04em"}}>{dateLabel}</div>
+          <div style={{fontSize:11,color:"var(--muted)",fontStyle:"italic",marginTop:2}}>{ref}</div>
         </div>
 
-        <button
-          onClick={()=>setDayIdx(i=>Math.min(364,i+1))}
-          disabled={dayIdx===364}
-          style={{width:36,height:36,borderRadius:"50%",border:"1.5px solid var(--border)",background:"none",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",color:dayIdx===364?"var(--border)":"var(--ink)",transition:"all .15s"}}
-        >→</button>
+        <button onClick={()=>navDia(1)} disabled={dia>=365} style={{
+          width:36,height:36,borderRadius:"50%",border:"1.5px solid var(--border)",
+          background:"var(--surface)",cursor:"pointer",display:"flex",alignItems:"center",
+          justifyContent:"center",fontSize:16,color:"var(--ink)",flexShrink:0,
+          opacity:dia>=365?0.3:1,transition:"all .2s",
+        }}>›</button>
       </div>
 
-      {/* Referência do dia */}
-      <div style={{textAlign:"center",marginBottom:16,padding:"12px 0",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)"}}>
-        <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:22,fontWeight:700,color:"var(--ink)",marginBottom:3}}>{ref.t}</div>
-        <div style={{fontSize:12,color:"var(--gold)",fontWeight:600}}>{ref.r}</div>
+      {/* Barra de progresso */}
+      <div style={{height:2,background:"var(--border)",borderRadius:2,marginBottom:20,overflow:"hidden"}}>
+        <div style={{height:"100%",background:"var(--gold)",borderRadius:2,width:progress+"%",transition:"width .4s"}}/>
       </div>
 
+      {/* Loading */}
       {loading && (
-        <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:12,padding:"40px 0"}}>
+        <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:14,padding:"48px 0"}}>
           <div className="ring"/>
-          <p style={{fontSize:13,color:"var(--muted)",textAlign:"center",lineHeight:1.6}}>Preparando o devocional de hoje...<br/>Aguarde um momento</p>
+          <p style={{fontSize:13,color:"var(--muted)",textAlign:"center",lineHeight:1.6,maxWidth:220}}>
+            Preparando o devocional do dia {dia}...
+          </p>
         </div>
       )}
 
-      {error && (
-        <div style={{background:"rgba(139,26,26,0.07)",border:"1px solid rgba(139,26,26,0.2)",borderRadius:10,padding:"12px 14px",marginBottom:12}}>
-          <p style={{fontSize:13,color:"var(--red,#8B1A1A)"}}>{error}</p>
-          <button onClick={()=>generate(dayIdx)} style={{marginTop:8,fontSize:12,color:"var(--gold)",background:"none",border:"none",cursor:"pointer",fontWeight:600}}>↺ Tentar novamente</button>
+      {/* Erro */}
+      {error && !loading && (
+        <div style={{background:"rgba(139,26,26,0.06)",border:"1px solid var(--red)",borderRadius:10,padding:16,marginBottom:16}}>
+          <p style={{fontSize:13,color:"var(--red)",marginBottom:10}}>{error}</p>
+          <button onClick={()=>gerarDevocional(dia)} style={{
+            padding:"7px 16px",border:"1px solid var(--red)",borderRadius:8,
+            background:"none",color:"var(--red)",cursor:"pointer",fontSize:12,fontWeight:600,
+          }}>Tentar novamente</button>
         </div>
       )}
 
+      {/* Conteúdo */}
       {dev && !loading && (
-        <div style={{animation:"fu 0.5s ease both"}}>
-          {/* Versículo */}
-          {dev.versiculo && (
-            <div style={{background:"var(--surface)",borderLeft:"3px solid var(--gold)",borderRadius:"0 10px 10px 0",padding:"14px 16px",marginBottom:16,fontSize:15,lineHeight:1.8,color:"var(--ink)",fontStyle:"italic"}}>
-              "{dev.versiculo}"
-            </div>
-          )}
+        <div style={{animation:"fu 0.4s ease both"}}>
 
-          {/* Reflexão com tooltips hebraicos */}
-          <div style={{marginBottom:16}}>
-            <div style={{fontSize:10,fontWeight:600,letterSpacing:"0.12em",textTransform:"uppercase",color:"var(--muted)",marginBottom:8}}>Reflexão</div>
-            <div style={{fontSize:14,lineHeight:1.9,color:"var(--ink2)"}}>
-              {dev.reflexao?.split("\n\n").map((p,i)=>(
-                <p key={i} style={{marginBottom:12}}>{renderReflexao(p)}</p>
-              ))}
-            </div>
-            <p style={{fontSize:11,color:"var(--muted)",fontStyle:"italic",marginTop:4}}>
-              * Passe o mouse ou toque nas palavras douradas para ver o hebraico/grego original
-            </p>
+          {/* Título */}
+          <div style={{
+            fontFamily:"'Cormorant Garamond',serif",
+            fontSize:28,fontWeight:700,lineHeight:1.2,
+            color:"var(--ink)",marginBottom:16,
+          }}>{dev.titulo}</div>
+
+          {/* Versículo */}
+          <div style={{
+            background:"var(--surface)",
+            borderLeft:"3px solid var(--gold)",
+            borderRadius:"0 10px 10px 0",
+            padding:"14px 16px",marginBottom:18,
+          }}>
+            <div style={{fontSize:10,fontWeight:600,color:"var(--gold)",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:6}}>{ref} · NVI</div>
+            <div style={{fontSize:16,lineHeight:1.8,color:"var(--ink)",fontStyle:"italic",fontFamily:"'Cormorant Garamond',serif"}}>"{dev.versiculo}"</div>
+          </div>
+
+          {/* Reflexão */}
+          <div style={{fontSize:15,lineHeight:1.9,color:"var(--ink2)",marginBottom:18}}>
+            {dev.reflexao?.split("\n\n").map((p,i)=>(
+              <p key={i} style={{marginBottom:i < dev.reflexao.split("\n\n").length-1 ? 14 : 0}}>
+                {renderText(p)}
+              </p>
+            ))}
           </div>
 
           {/* Oração */}
-          <div style={{background:"var(--gold-bg)",border:"1px solid var(--gold-border)",borderRadius:12,padding:"14px 16px",marginBottom:14}}>
-            <div style={{fontSize:10,fontWeight:600,letterSpacing:"0.12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:8}}>🙏 Oração do dia</div>
-            <div style={{fontSize:13,lineHeight:1.75,color:"var(--ink2)",fontStyle:"italic"}}>{dev.oracao}</div>
+          <div style={{
+            background:"var(--gold-bg)",border:"1px solid var(--gold-border)",
+            borderRadius:12,padding:"16px 18px",marginBottom:18,
+          }}>
+            <div style={{fontSize:10,fontWeight:600,color:"var(--gold)",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:8}}>🙏 Oração</div>
+            <div style={{fontSize:14,lineHeight:1.8,color:"var(--ink2)",fontStyle:"italic"}}>
+              {renderText(dev.oracao)}
+            </div>
           </div>
 
           {/* Aplicação */}
-          <div style={{borderTop:"1px solid var(--border)",paddingTop:12,marginBottom:14}}>
-            <div style={{fontSize:10,fontWeight:600,letterSpacing:"0.12em",textTransform:"uppercase",color:"var(--muted)",marginBottom:6}}>✦ Aplicação do dia</div>
-            <div style={{fontSize:14,color:"var(--ink)",fontWeight:500,lineHeight:1.7}}>{dev.aplicacao}</div>
+          <div style={{
+            borderTop:"2px solid var(--gold)",paddingTop:14,marginBottom:16,
+          }}>
+            <div style={{fontSize:10,fontWeight:600,color:"var(--gold)",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:6}}>✦ Para hoje</div>
+            <div style={{fontSize:14,fontWeight:500,color:"var(--ink)",lineHeight:1.7}}>
+              {renderText(dev.aplicacao)}
+            </div>
           </div>
+
+          {/* Botão regenerar */}
+          <button onClick={()=>{ const c=loadCache(); delete c[dia]; saveCache(c); setDev(null); gerarDevocional(dia); }}
+            style={{
+              fontSize:12,color:"var(--muted)",background:"none",border:"none",
+              cursor:"pointer",textDecoration:"underline",padding:0,
+            }}>
+            ↻ Gerar nova reflexão para este dia
+          </button>
         </div>
       )}
 
-      {/* Barra de progresso */}
-      {!loading && (
-        <>
-          <div style={{height:3,background:"var(--border)",borderRadius:2,overflow:"hidden",marginTop:8}}>
-            <div style={{height:"100%",background:"var(--gold)",borderRadius:2,width:`${progresso}%`,transition:"width 0.5s ease"}}/>
-          </div>
-          <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"var(--muted)",marginTop:4}}>
-            <span>Plano: 365 dias com Deus</span>
-            <span>{progresso}% · {dayIdx+1} dias</span>
-          </div>
-        </>
+      {/* Dica sobre palavras hebraicas */}
+      {dev && !loading && (
+        <div style={{
+          marginTop:20,padding:"10px 14px",background:"var(--surface)",
+          borderRadius:8,fontSize:11,color:"var(--muted)",lineHeight:1.5,
+        }}>
+          💡 As palavras em <span style={{color:"var(--gold)",fontWeight:600,fontStyle:"italic"}}>dourado</span> são termos hebraicos — passe o mouse ou clique para ver o significado original.
+        </div>
       )}
     </div>
   );
-      }
+}
