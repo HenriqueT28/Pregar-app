@@ -184,7 +184,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 }
 `;
 
-// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ API ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+// âÃÂÃÂÃÂÃÂ API âÃÂÃÂÃÂÃÂ
 async function ai(system, user, tokens = 2200) {
   const r = await fetch("/api/chat", {
     method: "POST",
@@ -202,24 +202,24 @@ async function ai(system, user, tokens = 2200) {
 }
 
 async function aiJSON(system, user, tokens = 1500) {
-  const t = await ai(system + "\n\nRetorne APENAS JSON vÃÂÃÂÃÂÃÂ¡lido, sem markdown, sem texto extra.", user, tokens);
+  const t = await ai(system + "\n\nRetorne APENAS JSON vÃÂÃÂÃÂÃÂ¡lido, sem markdown, sem texto extra.", user, tokens);
   try { return JSON.parse(t.replace(/```json|```/g, "").trim()); } catch { return null; }
 }
 
-// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ PASTOR SYSTEM PROMPT ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
-const PS = `VocÃÂÃÂÃÂÃÂª ÃÂÃÂÃÂÃÂ© um pastor-teÃÂÃÂÃÂÃÂ³logo cristocÃÂÃÂÃÂÃÂªntrico de altÃÂÃÂÃÂÃÂ­ssimo nÃÂÃÂÃÂÃÂ­vel, com o estilo combinado de:
-- Renan Belas: profundidade exegÃÂÃÂÃÂÃÂ©tica, narrativa envolvente, frases que paralisam o coraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o, linguagem poÃÂÃÂÃÂÃÂ©tica
-- Raik Carmelo: ousadia profÃÂÃÂÃÂÃÂ©tica, confronto amoroso, apelos intensos, energia do EspÃÂÃÂÃÂÃÂ­rito Santo
-- Luciano SubirÃÂÃÂÃÂÃÂ¡: clareza didÃÂÃÂÃÂÃÂ¡tica, humor contextualizado, ilustraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂµes do cotidiano, teologia acessÃÂÃÂÃÂÃÂ­vel
+// âÃÂÃÂÃÂÃÂ PASTOR SYSTEM PROMPT âÃÂÃÂÃÂÃÂ
+const PS = `VocÃÂÃÂÃÂÃÂª ÃÂÃÂÃÂÃÂ© um pastor-teÃÂÃÂÃÂÃÂ³logo cristocÃÂÃÂÃÂÃÂªntrico de altÃÂÃÂÃÂÃÂ­ssimo nÃÂÃÂÃÂÃÂ­vel, com o estilo combinado de:
+- Renan Belas: profundidade exegÃÂÃÂÃÂÃÂ©tica, narrativa envolvente, frases que paralisam o coraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o, linguagem poÃÂÃÂÃÂÃÂ©tica
+- Raik Carmelo: ousadia profÃÂÃÂÃÂÃÂ©tica, confronto amoroso, apelos intensos, energia do EspÃÂÃÂÃÂÃÂ­rito Santo
+- Luciano SubirÃÂÃÂÃÂÃÂ¡: clareza didÃÂÃÂÃÂÃÂ¡tica, humor contextualizado, ilustraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂµes do cotidiano, teologia acessÃÂÃÂÃÂÃÂ­vel
 
 REGRAS ABSOLUTAS:
-+ Cristo ÃÂÃÂÃÂÃÂ© sempre o centro e a resposta de tudo
-+ Use a versÃÂÃÂÃÂÃÂ£o NVI da BÃÂÃÂÃÂÃÂ­blia SEMPRE
-+ Frases de impacto que ficam gravadas no coraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o
-+ Profundidade teolÃÂÃÂÃÂÃÂ³gica com linguagem simples
++ Cristo ÃÂÃÂÃÂÃÂ© sempre o centro e a resposta de tudo
++ Use a versÃÂÃÂÃÂÃÂ£o NVI da BÃÂÃÂÃÂÃÂ­blia SEMPRE
++ Frases de impacto que ficam gravadas no coraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o
++ Profundidade teolÃÂÃÂÃÂÃÂ³gica com linguagem simples
 + Temas ILIMITADOS - qualquer assunto humano tem resposta no Evangelho`;
 
-// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ SUGGESTIONS ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+// âÃÂÃÂÃÂÃÂ SUGGESTIONS âÃÂÃÂÃÂÃÂ
 function Suggestions({ onSelect }) {
     const list = [
     ["Ansiedade","Fp 4.6-7"],["Propósito de vida","Jr 29.11"],["Perdão","Mt 18.21-22"],
@@ -239,19 +239,19 @@ function Suggestions({ onSelect }) {
   );
 }
 
-// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ LIVE MODE ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+// âÃÂÃÂÃÂÃÂ LIVE MODE âÃÂÃÂÃÂÃÂ
 function LiveMode({ sermon, onClose }) {
   return (
     <div className="live-overlay" onClick={onClose}>
       <div className="live-ref">{sermon.ref}</div>
       <div className="live-title">{sermon.title}</div>
       <div className="live-body">{sermon.text}</div>
-      <div className="live-hint">Clique para sair do modo pregaÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o</div>
+      <div className="live-hint">Clique para sair do modo pregaÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o</div>
     </div>
   );
 }
 
-// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ SERMON GENERATOR ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+// âÃÂÃÂÃÂÃÂ SERMON GENERATOR âÃÂÃÂÃÂÃÂ
 function SermonGen({ saves, setSaves, showToast }) {
   const [topic, setTopic] = useState("");
   const [ref, setRef] = useState("");
@@ -263,16 +263,16 @@ function SermonGen({ saves, setSaves, showToast }) {
   const [phrases, setPhrases] = useState([]);
   const [live, setLive] = useState(false);
 
-  const styles = ["EvangelÃÂÃÂÃÂÃÂ­stico","Expositivo","Devocional","ProfÃÂÃÂÃÂÃÂ©tico","TemÃÂÃÂÃÂÃÂ¡tico","Para jovens"];
+  const styles = ["EvangelÃÂÃÂÃÂÃÂ­stico","Expositivo","Devocional","ProfÃÂÃÂÃÂÃÂ©tico","TemÃÂÃÂÃÂÃÂ¡tico","Para jovens"];
 
   async function generate() {
     if (!topic) return;
     setLoading(true); setSermon(null); setPrayer(""); setPhrases([]);
     try {
-      const sys = PS + `\n\nFormato de saÃÂÃÂÃÂÃÂ­da JSON:\n{"title":"...","ref":"...","text":"sermÃÂÃÂÃÂÃÂ£o completo aqui com introduÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o, 3 pontos, conclusÃÂÃÂÃÂÃÂ£o e apelo","prayer":"oraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o de fechamento","phrases":["frase1","frase2","frase3","frase4","frase5"]}`;
-      const prompt = `Gere um sermÃÂÃÂÃÂÃÂ£o cristocÃÂÃÂÃÂÃÂªntrico completo sobre: ${topic}${ref ? ` (referÃÂÃÂÃÂÃÂªncia: ${ref})` : ""}.
-DuraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o: ${dur} minutos. Estilo: ${style.length ? style.join(", ") : "balanceado"}.
-O sermÃÂÃÂÃÂÃÂ£o deve ter introduÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o impactante, 3 pontos exegÃÂÃÂÃÂÃÂ©ticos, aplicaÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o prÃÂÃÂÃÂÃÂ¡tica e apelo ao Evangelho.`;
+      const sys = PS + `\n\nFormato de saÃÂÃÂÃÂÃÂ­da JSON:\n{"title":"...","ref":"...","text":"sermÃÂÃÂÃÂÃÂ£o completo aqui com introduÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o, 3 pontos, conclusÃÂÃÂÃÂÃÂ£o e apelo","prayer":"oraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o de fechamento","phrases":["frase1","frase2","frase3","frase4","frase5"]}`;
+      const prompt = `Gere um sermÃÂÃÂÃÂÃÂ£o cristocÃÂÃÂÃÂÃÂªntrico completo sobre: ${topic}${ref ? ` (referÃÂÃÂÃÂÃÂªncia: ${ref})` : ""}.
+DuraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o: ${dur} minutos. Estilo: ${style.length ? style.join(", ") : "balanceado"}.
+O sermÃÂÃÂÃÂÃÂ£o deve ter introduÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o impactante, 3 pontos exegÃÂÃÂÃÂÃÂ©ticos, aplicaÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o prÃÂÃÂÃÂÃÂ¡tica e apelo ao Evangelho.`;
       const r = await aiJSON(sys, prompt, 2200);
       if (r) { setSermon(r); setPrayer(r.prayer||""); setPhrases(r.phrases||[]); }
     } catch(e) { showToast("Erro: " + e.message); }
@@ -283,7 +283,7 @@ O sermÃÂÃÂÃÂÃÂ£o deve ter introduÃÂÃÂÃÂ
     if (!sermon) return;
     const s = { id: Date.now(), title: sermon.title, ref: sermon.ref, text: sermon.text, date: new Date().toLocaleDateString("pt-BR") };
     setSaves(p => [s, ...p.slice(0,19)]);
-    showToast("SermÃÂÃÂÃÂÃÂ£o salvo!");
+    showToast("SermÃÂÃÂÃÂÃÂ£o salvo!");
   }
 
   function copy() {
@@ -297,49 +297,49 @@ O sermÃÂÃÂÃÂÃÂ£o deve ter introduÃÂÃÂÃÂ
       <div className="f" style={{display:"grid",gap:14}}>
         <div style={{display:"grid",gap:4}}>
           <label>Tema ou passagem</label>
-          <input value={topic} onChange={e=>setTopic(e.target.value)} onKeyDown={e=>e.key==="Enter"&&generate()} placeholder="Ex: Ansiedade, JoÃÂÃÂÃÂÃÂ£o 3.16, PropÃÂÃÂÃÂÃÂ³sito de vida..." />
+          <input value={topic} onChange={e=>setTopic(e.target.value)} onKeyDown={e=>e.key==="Enter"&&generate()} placeholder="Ex: Ansiedade, JoÃÂÃÂÃÂÃÂ£o 3.16, PropÃÂÃÂÃÂÃÂ³sito de vida..." />
         </div>
         <Suggestions onSelect={(t,r)=>{setTopic(t);setRef(r);}} />
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
           <div style={{display:"grid",gap:4}}>
-            <label>VersÃÂÃÂÃÂÃÂ­culo base (opcional)</label>
+            <label>VersÃÂÃÂÃÂÃÂ­culo base (opcional)</label>
             <input value={ref} onChange={e=>setRef(e.target.value)} placeholder="Ex: Fp 4.13" />
           </div>
           <div style={{display:"grid",gap:4}}>
-            <label>DuraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o (minutos)</label>
+            <label>DuraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o (minutos)</label>
             <select value={dur} onChange={e=>setDur(e.target.value)}>
               {["10","15","20","30","45","60"].map(d=><option key={d}>{d}</option>)}
             </select>
           </div>
         </div>
         <div style={{display:"grid",gap:6}}>
-          <label>Estilo do sermÃÂÃÂÃÂÃÂ£o</label>
+          <label>Estilo do sermÃÂÃÂÃÂÃÂ£o</label>
           <div className="chips">
             {styles.map(s=><button key={s} className={`chip${style.includes(s)?" on":""}`} onClick={()=>setStyle(p=>p.includes(s)?p.filter(x=>x!==s):[...p,s])}>{s}</button>)}
           </div>
         </div>
         <button className="btn" onClick={generate} disabled={!topic||loading}>
-          {loading?<><div className="dots"><span/><span/><span/></div>Construindo sermÃÂÃÂÃÂÃÂ£o cristocÃÂÃÂÃÂÃÂªntrico...</>:"ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¦ Gerar SermÃÂÃÂÃÂÃÂ£o"}
+          {loading?<><div className="dots"><span/><span/><span/></div>Construindo sermÃÂÃÂÃÂÃÂ£o cristocÃÂÃÂÃÂÃÂªntrico...</>:"âÃÂÃÂÃÂÃÂ¦ Gerar SermÃÂÃÂÃÂÃÂ£o"}
         </button>
       </div>
 
-      {loading && <div className="loader"><div className="ring"/><p>Construindo sermÃÂÃÂÃÂÃÂ£o cristocÃÂÃÂÃÂÃÂªntrico com frases de impacto...</p></div>}
+      {loading && <div className="loader"><div className="ring"/><p>Construindo sermÃÂÃÂÃÂÃÂ£o cristocÃÂÃÂÃÂÃÂªntrico com frases de impacto...</p></div>}
 
       {sermon && !loading && (
         <div className="out">
-          <div className="otag">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¦ SermÃÂÃÂÃÂÃÂ£o ÃÂÃÂÃÂÃÂ· NVI</div>
+          <div className="otag">âÃÂÃÂÃÂÃÂ¦ SermÃÂÃÂÃÂÃÂ£o ÃÂÃÂÃÂÃÂ· NVI</div>
           <div className="otitle">{sermon.title}</div>
           {sermon.ref && <div className="oref">{sermon.ref}</div>}
           {prayer && (
             <div className="prayer" style={{marginTop:14}}>
-              <div className="prayer-label">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ OraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o de Abertura</div>
+              <div className="prayer-label">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ OraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o de Abertura</div>
               <div className="prayer-text">{prayer}</div>
             </div>
           )}
           <div className="obody">{sermon.text}</div>
           {phrases.length > 0 && (
             <div className="pbox">
-              <div className="pbox-title">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¦ Frases de Impacto ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Clique para copiar</div>
+              <div className="pbox-title">âÃÂÃÂÃÂÃÂ¦ Frases de Impacto âÃÂÃÂÃÂÃÂ Clique para copiar</div>
               {phrases.map((p,i)=>(
                 <div key={i} className="phrase" onClick={()=>{navigator.clipboard.writeText(`"${p}"`);showToast("Frase copiada!");}}>{p}</div>
               ))}
@@ -347,9 +347,9 @@ O sermÃÂÃÂÃÂÃÂ£o deve ter introduÃÂÃÂÃÂ
             </div>
           )}
           <div className="brow">
-            <button className="btn2" onClick={handleSave}>ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¾ Salvar</button>
-            <button className="btn2" onClick={copy}>ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Copiar Tudo</button>
-            <button className="btn2" onClick={()=>setLive(true)}>ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂº Modo PregaÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o</button>
+            <button className="btn2" onClick={handleSave}>ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¾ Salvar</button>
+            <button className="btn2" onClick={copy}>ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Copiar Tudo</button>
+            <button className="btn2" onClick={()=>setLive(true)}>ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂº Modo PregaÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o</button>
           </div>
         </div>
       )}
@@ -358,14 +358,14 @@ O sermÃÂÃÂÃÂÃÂ£o deve ter introduÃÂÃÂÃÂ
   );
 }
 
-// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ THEME SUGGESTIONS ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+// âÃÂÃÂÃÂÃÂ THEME SUGGESTIONS âÃÂÃÂÃÂÃÂ
 function ThemeSugg({ showToast }) {
   const [cat, setCat] = useState(""); const [loading, setLoading] = useState(false); const [items, setItems] = useState([]);
-  const cats = ["FamÃÂÃÂÃÂÃÂ­lia","Jovens","PÃÂÃÂÃÂÃÂ¡scoa","Natal","Evangelismo","Crise","Identidade","MissÃÂÃÂÃÂÃÂµes","Batismo","Casamento"];
+  const cats = ["FamÃÂÃÂÃÂÃÂ­lia","Jovens","PÃÂÃÂÃÂÃÂ¡scoa","Natal","Evangelismo","Crise","Identidade","MissÃÂÃÂÃÂÃÂµes","Batismo","Casamento"];
   async function gen() {
     if(!cat) return; setLoading(true); setItems([]);
     try {
-      const r = await aiJSON(PS, `Liste 8 temas de sermÃÂÃÂÃÂÃÂ£o ÃÂÃÂÃÂÃÂºnicos e poderosos para: ${cat}. Formato: [{"tema":"...","ref":"...","gancho":"frase de abertura impactante"}]`, 800);
+      const r = await aiJSON(PS, `Liste 8 temas de sermÃÂÃÂÃÂÃÂ£o ÃÂÃÂÃÂÃÂºnicos e poderosos para: ${cat}. Formato: [{"tema":"...","ref":"...","gancho":"frase de abertura impactante"}]`, 800);
       if(r) setItems(r);
     } catch(e) { showToast("Erro: "+e.message); }
     setLoading(false);
@@ -376,7 +376,7 @@ function ThemeSugg({ showToast }) {
         <div style={{display:"grid",gap:6}}><label>Categoria</label>
           <div className="chips">{cats.map(c=><button key={c} className={`chip${cat===c?" on":""}`} onClick={()=>setCat(c)}>{c}</button>)}</div>
         </div>
-        <button className="btn" onClick={gen} disabled={!cat||loading}>{loading?<><div className="dots"><span/><span/><span/></div>Buscando...</>:"ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¦ Sugerir Temas"}</button>
+        <button className="btn" onClick={gen} disabled={!cat||loading}>{loading?<><div className="dots"><span/><span/><span/></div>Buscando...</>:"âÃÂÃÂÃÂÃÂ¦ Sugerir Temas"}</button>
       </div>
       {loading && <div className="loader"><div className="ring"/><p>Buscando temas...</p></div>}
       {items.length>0 && !loading && (
@@ -394,13 +394,13 @@ function ThemeSugg({ showToast }) {
   );
 }
 
-// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ VERSE SEARCH ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+// âÃÂÃÂÃÂÃÂ VERSE SEARCH âÃÂÃÂÃÂÃÂ
 function VerseSearch({ showToast }) {
   const [q, setQ] = useState(""); const [loading, setLoading] = useState(false); const [res, setRes] = useState([]);
   async function search() {
     if(!q) return; setLoading(true); setRes([]);
     try {
-      const r = await aiJSON(PS, `Encontre 5 versÃÂÃÂÃÂÃÂ­culos NVI mais relevantes para: "${q}". Formato: [{"ref":"...","text":"texto completo","why":"por que se aplica"}]`, 900);
+      const r = await aiJSON(PS, `Encontre 5 versÃÂÃÂÃÂÃÂ­culos NVI mais relevantes para: "${q}". Formato: [{"ref":"...","text":"texto completo","why":"por que se aplica"}]`, 900);
       if(r) setRes(r);
     } catch(e) { showToast("Erro: "+e.message); }
     setLoading(false);
@@ -408,10 +408,10 @@ function VerseSearch({ showToast }) {
   return (
     <div className="page">
       <div className="f" style={{display:"grid",gap:12}}>
-        <div style={{display:"grid",gap:4}}><label>Buscar versÃÂÃÂÃÂÃÂ­culos</label>
-          <input value={q} onChange={e=>setQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&search()} placeholder="Ex: ansiedade, perdÃÂÃÂÃÂÃÂ£o, cura, esperanÃÂÃÂÃÂÃÂ§a..."/>
+        <div style={{display:"grid",gap:4}}><label>Buscar versÃÂÃÂÃÂÃÂ­culos</label>
+          <input value={q} onChange={e=>setQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&search()} placeholder="Ex: ansiedade, perdÃÂÃÂÃÂÃÂ£o, cura, esperanÃÂÃÂÃÂÃÂ§a..."/>
         </div>
-        <button className="btn" onClick={search} disabled={!q||loading}>{loading?<><div className="dots"><span/><span/><span/></div>Buscando...</>:"ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¦ Buscar"}</button>
+        <button className="btn" onClick={search} disabled={!q||loading}>{loading?<><div className="dots"><span/><span/><span/></div>Buscando...</>:"âÃÂÃÂÃÂÃÂ¦ Buscar"}</button>
       </div>
       {loading && <div className="loader"><div className="ring"/><p>Buscando...</p></div>}
       {res.length>0 && !loading && (
@@ -421,7 +421,7 @@ function VerseSearch({ showToast }) {
               <div style={{fontSize:11,color:"var(--gold)",fontWeight:600,marginBottom:6}}>{v.ref}</div>
               <div style={{fontSize:14,lineHeight:1.75,color:"var(--ink)",marginBottom:8,fontStyle:"italic"}}>"{v.text}"</div>
               <div style={{fontSize:12,color:"var(--muted)"}}>{v.why}</div>
-              <button className="btn2" style={{marginTop:8}} onClick={()=>{navigator.clipboard.writeText(`${v.ref} ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ${v.text}`);showToast("Copiado!");}}>ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Copiar</button>
+              <button className="btn2" style={{marginTop:8}} onClick={()=>{navigator.clipboard.writeText(`${v.ref} âÃÂÃÂÃÂÃÂ ${v.text}`);showToast("Copiado!");}}>ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Copiar</button>
             </div>
           ))}
         </div>
@@ -430,13 +430,13 @@ function VerseSearch({ showToast }) {
   );
 }
 
-// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ OUTLINE ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+// âÃÂÃÂÃÂÃÂ OUTLINE âÃÂÃÂÃÂÃÂ
 function Outline({ showToast }) {
   const [topic, setTopic] = useState(""); const [loading, setLoading] = useState(false); const [outline, setOutline] = useState(null);
   async function gen() {
     if(!topic) return; setLoading(true); setOutline(null);
     try {
-      const r = await aiJSON(PS, `Crie um esboÃÂÃÂÃÂÃÂ§o completo de sermÃÂÃÂÃÂÃÂ£o sobre: ${topic}. Formato: {"title":"...","ref":"...","intro":"...","points":[{"title":"...","text":"...","verse":"..."}],"conclusion":"...","appeal":"..."}`, 1200);
+      const r = await aiJSON(PS, `Crie um esboÃÂÃÂÃÂÃÂ§o completo de sermÃÂÃÂÃÂÃÂ£o sobre: ${topic}. Formato: {"title":"...","ref":"...","intro":"...","points":[{"title":"...","text":"...","verse":"..."}],"conclusion":"...","appeal":"..."}`, 1200);
       if(r) setOutline(r);
     } catch(e) { showToast("Erro: "+e.message); }
     setLoading(false);
@@ -444,25 +444,25 @@ function Outline({ showToast }) {
   return (
     <div className="page">
       <div className="f" style={{display:"grid",gap:12}}>
-        <div style={{display:"grid",gap:4}}><label>Tema do esboÃÂÃÂÃÂÃÂ§o</label>
-          <input value={topic} onChange={e=>setTopic(e.target.value)} onKeyDown={e=>e.key==="Enter"&&gen()} placeholder="Ex: A graÃÂÃÂÃÂÃÂ§a que transforma, JoÃÂÃÂÃÂÃÂ£o 3.16..."/>
+        <div style={{display:"grid",gap:4}}><label>Tema do esboÃÂÃÂÃÂÃÂ§o</label>
+          <input value={topic} onChange={e=>setTopic(e.target.value)} onKeyDown={e=>e.key==="Enter"&&gen()} placeholder="Ex: A graÃÂÃÂÃÂÃÂ§a que transforma, JoÃÂÃÂÃÂÃÂ£o 3.16..."/>
         </div>
-        <button className="btn" onClick={gen} disabled={!topic||loading}>{loading?<><div className="dots"><span/><span/><span/></div>Criando...</>:"ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¦ Criar EsboÃÂÃÂÃÂÃÂ§o"}</button>
+        <button className="btn" onClick={gen} disabled={!topic||loading}>{loading?<><div className="dots"><span/><span/><span/></div>Criando...</>:"âÃÂÃÂÃÂÃÂ¦ Criar EsboÃÂÃÂÃÂÃÂ§o"}</button>
       </div>
-      {loading && <div className="loader"><div className="ring"/><p>Criando esboÃÂÃÂÃÂÃÂ§o...</p></div>}
+      {loading && <div className="loader"><div className="ring"/><p>Criando esboÃÂÃÂÃÂÃÂ§o...</p></div>}
       {outline && !loading && (
         <div className="out">
-          <div className="otag">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¦ EsboÃÂÃÂÃÂÃÂ§o</div>
+          <div className="otag">âÃÂÃÂÃÂÃÂ¦ EsboÃÂÃÂÃÂÃÂ§o</div>
           <div className="otitle">{outline.title}</div>
           {outline.ref && <div className="oref">{outline.ref}</div>}
           <div className="obody">
-            <strong>IntroduÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o:</strong>\n{outline.intro}\n\n
+            <strong>IntroduÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o:</strong>\n{outline.intro}\n\n
             {outline.points?.map((p,i)=>`${i+1}. ${p.title}\n${p.text}\n(${p.verse})\n\n`).join("")}
-            <strong>ConclusÃÂÃÂÃÂÃÂ£o:</strong>\n{outline.conclusion}\n\n
+            <strong>ConclusÃÂÃÂÃÂÃÂ£o:</strong>\n{outline.conclusion}\n\n
             <strong>Apelo:</strong>\n{outline.appeal}
           </div>
           <div className="brow">
-            <button className="btn2" onClick={()=>{const t=`${outline.title}\n${outline.ref||""}\n\nIntroduÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o:\n${outline.intro}\n\n${outline.points?.map((p,i)=>`${i+1}. ${p.title}\n${p.text}\n(${p.verse})`).join("\n\n")}\n\nConclusÃÂÃÂÃÂÃÂ£o:\n${outline.conclusion}\n\nApelo:\n${outline.appeal}`;navigator.clipboard.writeText(t);showToast("Copiado!");}}>ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Copiar EsboÃÂÃÂÃÂÃÂ§o</button>
+            <button className="btn2" onClick={()=>{const t=`${outline.title}\n${outline.ref||""}\n\nIntroduÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o:\n${outline.intro}\n\n${outline.points?.map((p,i)=>`${i+1}. ${p.title}\n${p.text}\n(${p.verse})`).join("\n\n")}\n\nConclusÃÂÃÂÃÂÃÂ£o:\n${outline.conclusion}\n\nApelo:\n${outline.appeal}`;navigator.clipboard.writeText(t);showToast("Copiado!");}}>ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Copiar EsboÃÂÃÂÃÂÃÂ§o</button>
           </div>
         </div>
       )}
@@ -470,7 +470,7 @@ function Outline({ showToast }) {
   );
 }
 
-// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ MAIN APP ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+// âÃÂÃÂÃÂÃÂ MAIN APP âÃÂÃÂÃÂÃÂ
 
 // — MAIN APP —
 export default function App() {
