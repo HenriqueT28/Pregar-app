@@ -529,10 +529,7 @@ export default function App() {
           {page==="esboco" && <Outline showToast={showToast}/>}
           {page==="biblia" && <div className="page"><Biblia/></div>}
           {page==="devocional" && <div className="page"><Devocional/></div>}
-          {page==="estudo" && <div className="page"><Estudo onGerarEstudo={async()=>{
-            setPage("sermao");
-            showToast("Abrindo gerador de estudo...");
-          }}/></div>}
+          {page==="estudo" && <div className="page"><Estudo/></div>div>}</div>
           {page==="comoestou" && <div className="page"><ComoEstou/></div>}
           {page==="saved" && selSave && (
             <div className="page">
