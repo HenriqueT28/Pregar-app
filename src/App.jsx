@@ -299,7 +299,7 @@ function ThemeSugg({ showToast }) {
       )}
     </div>
   );
-}
+
 function VerseSearch({ showToast }) {
   const [q, setQ] = useState(""); const [loading, setLoading] = useState(false); const [res, setRes] = useState([]);
   async function search() {
