@@ -211,21 +211,31 @@ function SermonGen({ saves, setSaves, showToast }) {
   );
 }
 function ThemeSugg({ showToast }) {
-  const [cat, setCat] = useState("");
-  const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [items, setItems] = useState([]);
-  const cats = ["Família","Jovens","Páscoa","Natal","Evangelismo","Crise","Identidade","Missões","Batismo","Casamento"];
+const [cat, setCat] = useState("");
+const [query, setQuery] = useState("");
+const [loading, setLoading] = useState(false);
+const [items, setItems] = useState([]);
   async function gen() {
-    const busca = query.trim() || cat;
-    if(!busca) return;
-    setLoading(true); setItems([]);
-    try {
-      const r = await aiJSON(PS, `Liste 8 temas de sermão únicos e poderosos para: ${busca}. Formato: [{"tema":"...","ref":"...","gancho":"frase de abertura impactante"}]`, 800);
-      if(r) setItems(r);
-    } catch(e) { showToast("Erro: "+e.message); }
-    setLoading(false);
+  const busca = query.trim() || cat;
+  if (!busca) return;
+
+  setLoading(true);
+  setItems([]);
+
+  try {
+    const r = await aiJSON(
+      PS,
+      `Liste 8 temas de sermão únicos e poderosos para: ${busca}. Formato: [{"tema":"...","ref":"...","gancho":"frase de abertura impactante"}]`,
+      800
+    );
+
+    if (r) setItems(r);
+  } catch (e) {
+    showToast("Erro: " + e.message);
   }
+
+  setLoading(false);
+}
   return (
     <div className="page">
       <div className="f" style={{display:"grid",gap:14}}>
