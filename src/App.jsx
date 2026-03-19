@@ -950,7 +950,7 @@ export default function App() {
           <div className="sb-logo">
             <div className="cross"/>
             <div>
-              <div className="brand">Pregar<span>.app</span></div>
+              <div className="brand">Bible<span> Rhema</span></div>
               <div style={{fontSize:9.5,color:"var(--muted)",letterSpacing:"0.1em",textTransform:"uppercase",marginTop:2}}>Pastor AI · NVI</div>
             </div>
           </div>
