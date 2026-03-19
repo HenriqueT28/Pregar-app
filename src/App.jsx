@@ -418,7 +418,7 @@ export default function App() {
       <style>{STYLE}</style>
       <div className="shell">
         <aside className="sidebar">
-          <div className="sb-logo"><div className="cross"/><div className="brand">Pregar<span>.app</span></div></div>
+          <div className="sb-logo"><div className="cross"/><div className="brand">Bible<span>.Rhema</span></div></div>
           <div style={{padding:"10px 18px 12px",borderBottom:"1px solid var(--border)",background:"var(--surface)"}}>
             <div style={{fontSize:10,fontWeight:600,letterSpacing:"0.08em",textTransform:"uppercase",color:"var(--muted)",marginBottom:2}}>
               {(()=>{const h=new Date().getHours();return h<12?"Bom dia":h<18?"Boa tarde":"Boa noite";})()}!
