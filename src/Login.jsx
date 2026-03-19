@@ -19,7 +19,6 @@ const VERSICULOS = [
 ];
 const getVer = () => VERSICULOS[new Date().getDay() % VERSICULOS.length];
 
-// BOAS-VINDAS
 function TelaBoasVindas({ nome, onContinuar }) {
   const pnome = nome?.trim().split(" ")[0] || "";
   const ver = getVer();
@@ -41,9 +40,6 @@ function TelaBoasVindas({ nome, onContinuar }) {
       <div style={{ fontSize:12, fontWeight:700, letterSpacing:"0.15em", textTransform:"uppercase", color:"#B8912A", marginBottom:14 }}>{getSaudacao()}</div>
       <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:54, fontWeight:700, color:"#17160F", lineHeight:1.05, marginBottom:10 }}>{pnome}!</div>
       <div style={{ fontSize:15, color:"#9A998F", marginBottom:48, fontStyle:"italic" }}>Que bom ter voce aqui hoje.</div>
-      <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:42, width:"100%", maxWidth:380 }}>
-        <div style={{ flex:1, height:1, background:"rgba(184,145,42,0.18)" }}/><div style={{ width:5, height:5, borderRadius:"50%", background:"#B8912A", opacity:0.5 }}/><div style={{ flex:1, height:1, background:"rgba(184,145,42,0.18)" }}/>
-      </div>
       <div style={{ maxWidth:420, textAlign:"center" }}>
         <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:21, fontStyle:"italic", color:"#3D3C35", lineHeight:1.8, marginBottom:12 }}>"{ver.texto}"</div>
         <div style={{ fontSize:11, fontWeight:700, color:"#B8912A", letterSpacing:"0.12em", textTransform:"uppercase" }}>{ver.ref} · NVI</div>
@@ -59,7 +55,6 @@ function TelaBoasVindas({ nome, onContinuar }) {
   );
 }
 
-// COMPONENTE PRINCIPAL
 export default function Login({ onLogin }) {
   const [tela, setTela] = useState("login");
   const [nomeUser, setNomeUser] = useState("");
@@ -84,9 +79,10 @@ export default function Login({ onLogin }) {
         <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:19, fontWeight:700, color:"#17160F" }}>Pregar<span style={{ color:"#B8912A" }}>.app</span></div>
       </div>
       <div style={{ width:"100%", maxWidth:390, background:"#fff", borderRadius:22, padding:"36px 32px 32px", boxShadow:"0 2px 48px rgba(23,22,15,0.07), 0 0 0 1px rgba(23,22,15,0.04)" }}>
-        {tela==="login"    && <TelaLogin    saudacao={saudacao} onLogin={(n)=>{ setNomeUser(n); setTela("boasvindas"); }} onCadastrar={()=>setTela("cadastro")}/>}
-        {tela==="cadastro" && <TelaCadastro onVoltar={()=>setTela("login")} onEnviado={(email)=>{ setEmailCadastro(email); setTela("aguardando"); }}/>}
+        {tela==="login"      && <TelaLogin saudacao={saudacao} onLogin={(n)=>{ setNomeUser(n); setTela("boasvindas"); }} onCadastrar={()=>setTela("cadastro")} onEsqueci={()=>setTela("esqueci")}/>}
+        {tela==="cadastro"   && <TelaCadastro onVoltar={()=>setTela("login")} onEnviado={(email)=>{ setEmailCadastro(email); setTela("aguardando"); }}/>}
         {tela==="aguardando" && <TelaAguardando email={emailCadastro} onVoltar={()=>setTela("login")}/>}
+        {tela==="esqueci"    && <TelaEsqueci onVoltar={()=>setTela("login")}/>}
       </div>
       <div style={{ marginTop:28, maxWidth:360, textAlign:"center" }}>
         <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:16, fontStyle:"italic", color:"#9A998F", lineHeight:1.75, marginBottom:6 }}>"{ver.texto}"</div>
@@ -96,8 +92,7 @@ export default function Login({ onLogin }) {
   );
 }
 
-// TELA LOGIN
-function TelaLogin({ saudacao, onLogin, onCadastrar }) {
+function TelaLogin({ saudacao, onLogin, onCadastrar, onEsqueci }) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [mostrar, setMostrar] = useState(false);
@@ -128,12 +123,15 @@ function TelaLogin({ saudacao, onLogin, onCadastrar }) {
       </div>
       {erro && <div style={{ fontSize:13, color:"#EF4444", marginBottom:14, padding:"10px 12px", background:"#FEF2F2", borderRadius:8, border:"1px solid #FCA5A5" }}>⚠ {erro}</div>}
       <Campo label="E-mail" type="email" value={email} onChange={e=>{ setEmail(e.target.value); setErro(""); }} placeholder="seu@email.com"/>
-      <div style={{ marginBottom:20 }}>
+      <div style={{ marginBottom:8 }}>
         <label style={lbStyle}>Senha</label>
         <div style={{ position:"relative" }}>
           <input type={mostrar?"text":"password"} value={senha} onChange={e=>{ setSenha(e.target.value); setErro(""); }} onKeyDown={e=>e.key==="Enter"&&handleEntrar()} placeholder="Sua senha" style={{ ...inpStyle, paddingRight:44 }} onFocus={inpFocus} onBlur={inpBlur}/>
           <button onClick={()=>setMostrar(o=>!o)} style={olhoStyle}>{mostrar?"🙈":"👁"}</button>
         </div>
+      </div>
+      <div style={{ textAlign:"right", marginBottom:20 }}>
+        <button onClick={onEsqueci} style={{ background:"none", border:"none", color:"#B8912A", fontSize:12, cursor:"pointer", fontFamily:"sans-serif" }}>Esqueci minha senha</button>
       </div>
       <button onClick={handleEntrar} disabled={carregando} style={{ ...btnPrimario, opacity:carregando?0.6:1, cursor:carregando?"not-allowed":"pointer" }}>
         {carregando?"Verificando...":"Entrar"}
@@ -146,7 +144,6 @@ function TelaLogin({ saudacao, onLogin, onCadastrar }) {
   );
 }
 
-// TELA CADASTRO
 function TelaCadastro({ onVoltar, onEnviado }) {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
@@ -168,7 +165,7 @@ function TelaCadastro({ onVoltar, onEnviado }) {
       options: { data: { nome: nome.trim() } }
     });
     if (error) {
-      if (error.message.includes("already registered")) setErro("Este e-mail ja esta cadastrado. Faca login.");
+      if (error.message.includes("already registered")) setErro("Este e-mail ja esta cadastrado. Faca login ou redefina sua senha.");
       else setErro(error.message);
       setCarregando(false); return;
     }
@@ -200,7 +197,6 @@ function TelaCadastro({ onVoltar, onEnviado }) {
   );
 }
 
-// TELA AGUARDANDO CONFIRMACAO (link no email)
 function TelaAguardando({ email, onVoltar }) {
   return (
     <div style={{ textAlign:"center", padding:"8px 0" }}>
@@ -211,17 +207,53 @@ function TelaAguardando({ email, onVoltar }) {
       <div style={{ fontSize:13, color:"#9A998F", lineHeight:1.75, marginBottom:28, padding:"16px", background:"#F8F7F3", borderRadius:12 }}>
         Abra o e-mail e clique em <strong style={{ color:"#17160F" }}>"Confirmar meu cadastro"</strong> para ativar sua conta.
       </div>
-      <div style={{ fontSize:12, color:"#C5C4BC", marginBottom:24 }}>
-        Nao recebeu? Verifique o spam.
+      <div style={{ fontSize:12, color:"#C5C4BC", marginBottom:24 }}>Nao recebeu? Verifique o spam.</div>
+      <button onClick={onVoltar} style={{ ...btnPrimario }}>Ja confirmei — Fazer login</button>
+    </div>
+  );
+}
+
+function TelaEsqueci({ onVoltar }) {
+  const [email, setEmail] = useState("");
+  const [enviado, setEnviado] = useState(false);
+  const [erro, setErro] = useState("");
+  const [carregando, setCarregando] = useState(false);
+
+  async function handleReset() {
+    if (!email.trim()) { setErro("Informe seu e-mail."); return; }
+    setCarregando(true); setErro("");
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
+      redirectTo: window.location.origin
+    });
+    if (error) { setErro(error.message); setCarregando(false); return; }
+    setEnviado(true); setCarregando(false);
+  }
+
+  if (enviado) return (
+    <div style={{ textAlign:"center", padding:"8px 0" }}>
+      <div style={{ fontSize:56, marginBottom:20 }}>✉️</div>
+      <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:24, fontWeight:700, color:"#17160F", marginBottom:14 }}>E-mail enviado!</div>
+      <div style={{ fontSize:14, color:"#9A998F", lineHeight:1.75, marginBottom:28 }}>Verifique sua caixa de entrada e clique no link para redefinir sua senha.</div>
+      <button onClick={onVoltar} style={{ ...btnPrimario }}>Voltar ao login</button>
+    </div>
+  );
+
+  return (
+    <div>
+      <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:22 }}>
+        <button onClick={onVoltar} style={{ background:"none", border:"none", cursor:"pointer", color:"#9A998F", fontSize:20, padding:0, lineHeight:1 }}>←</button>
+        <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:26, fontWeight:700, color:"#17160F" }}>Redefinir senha</div>
       </div>
-      <button onClick={onVoltar} style={{ ...btnPrimario }}>
-        Ja confirmei — Fazer login
+      <div style={{ fontSize:14, color:"#9A998F", marginBottom:20, lineHeight:1.6 }}>Informe seu e-mail e enviaremos um link para voce redefinir sua senha.</div>
+      {erro && <div style={{ fontSize:13, color:"#EF4444", marginBottom:14, padding:"10px 12px", background:"#FEF2F2", borderRadius:8, border:"1px solid #FCA5A5" }}>⚠ {erro}</div>}
+      <Campo label="E-mail" type="email" value={email} onChange={e=>{ setEmail(e.target.value); setErro(""); }} placeholder="seu@email.com"/>
+      <button onClick={handleReset} disabled={carregando} style={{ ...btnPrimario, opacity:carregando?0.6:1, cursor:carregando?"not-allowed":"pointer" }}>
+        {carregando?"Enviando...":"Enviar link de redefinição"}
       </button>
     </div>
   );
 }
 
-// ESTILOS COMPARTILHADOS
 const lbStyle = { fontSize:11, fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase", color:"#8A8980", display:"block", marginBottom:6 };
 const inpStyle = { width:"100%", padding:"13px 16px", border:"1px solid #E5E4DC", borderRadius:10, background:"#fff", color:"#17160F", fontSize:14, fontFamily:"sans-serif", outline:"none", boxSizing:"border-box", transition:"all 0.2s" };
 const inpFocus = e => { e.target.style.borderColor="#B8912A"; e.target.style.boxShadow="0 0 0 3px rgba(184,145,42,0.1)"; };
