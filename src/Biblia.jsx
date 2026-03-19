@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
-// Dicionário Strong / Hebraico
 const STRONG = {
   "princípio":{h:"H7225",heb:"בְּרֵאשִׁית",tr:"bə·rê·šîṯ",sig:"Começo absoluto — antes de tudo existir",ex:"Pv 8.22 — O Senhor me criou no princípio de sua obra"},
   "Deus":{h:"H430",heb:"אֱלֹהִים",tr:"ʾĕ·lō·hîm",sig:"Plural de majestade — o Deus Todo-Poderoso soberano",ex:"Sl 82.1 — Deus preside no conselho divino"},
@@ -19,75 +18,11 @@ const STRONG = {
   "santo":{h:"H6944",heb:"קֹדֶשׁ",tr:"ko·desh",sig:"Separado, radicalmente diferente — Deus é outro",ex:"Is 6.3 — Santo, santo, santo é o Senhor dos Exércitos"},
 };
 
-// Mapa completo dos 66 livros
-const LIVROS = {
-  "gn":0,"gênesis":0,"genesis":0,
-  "ex":1,"êxodo":1,"exodo":1,
-  "lv":2,"levítico":2,"levitico":2,
-  "nm":3,"números":3,"numeros":3,
-  "dt":4,"deuteronômio":4,"deuteronomio":4,
-  "js":5,"josué":5,"josue":5,
-  "jz":6,"juízes":6,"juizes":6,
-  "rt":7,"rute":7,
-  "1sm":8,"1samuel":8,"1 sm":8,
-  "2sm":9,"2samuel":9,"2 sm":9,
-  "1rs":10,"1reis":10,"1 rs":10,
-  "2rs":11,"2reis":11,"2 rs":11,
-  "1cr":12,"1crônicas":12,"1cronicas":12,
-  "2cr":13,"2crônicas":13,"2cronicas":13,
-  "ed":14,"esdras":14,
-  "ne":15,"neemias":15,
-  "et":16,"ester":16,
-  "jó":17,"jo":17,"jó":17,"job":17,
-  "sl":18,"salmos":18,"sal":18,
-  "pv":19,"provérbios":19,"proverbios":19,
-  "ec":20,"eclesiastes":20,
-  "ct":21,"cânticos":21,"canticos":21,
-  "is":22,"isaías":22,"isaias":22,
-  "jr":23,"jeremias":23,
-  "lm":24,"lamentações":24,"lamentacoes":24,
-  "ez":25,"ezequiel":25,
-  "dn":26,"daniel":26,
-  "os":27,"oséias":27,"oseias":27,
-  "jl":28,"joel":28,
-  "am":29,"amós":29,"amos":29,
-  "ob":30,"obadias":30,
-  "jn":31,"jonas":31,
-  "mq":32,"miquéias":32,"miqueias":32,
-  "na":33,"naum":33,
-  "hc":34,"habacuque":34,
-  "sf":35,"sofonias":35,
-  "ag":36,"ageu":36,
-  "zc":37,"zacarias":37,
-  "ml":38,"malaquias":38,
-  "mt":39,"mateus":39,
-  "mc":40,"marcos":40,
-  "lc":41,"lucas":41,
-  "jo":42,"joão":42,"joao":42,
-  "at":43,"atos":43,
-  "rm":44,"romanos":44,
-  "1co":45,"1coríntios":45,"1corintios":45,
-  "2co":46,"2coríntios":46,"2corintios":46,
-  "gl":47,"gálatas":47,"galatas":47,
-  "ef":48,"efésios":48,"efesios":48,
-  "fp":49,"filipenses":49,
-  "cl":50,"colossenses":50,
-  "1ts":51,"1tessalonicenses":51,
-  "2ts":52,"2tessalonicenses":52,
-  "1tm":53,"1timóteo":53,"1timoteo":53,
-  "2tm":54,"2timóteo":54,"2timoteo":54,
-  "tt":55,"tito":55,
-  "fm":56,"filemon":56,
-  "hb":57,"hebreus":57,
-  "tg":58,"tiago":58,
-  "1pe":59,"1pedro":59,
-  "2pe":60,"2pedro":60,
-  "1jo":61,"1joão":61,"1joao":61,
-  "2jo":62,"2joão":62,"2joao":62,
-  "3jo":63,"3joão":63,"3joao":63,
-  "jd":64,"judas":64,
-  "ap":65,"apocalipse":65,
-};
+// Número de capítulos por livro (66 livros)
+const CAPS_POR_LIVRO = [
+  50,40,27,36,34,24,21,4,31,24,22,25,29,36,10,13,10,42,150,31,12,8,66,52,5,48,12,14,3,9,1,4,7,3,3,3,2,14,4,
+  28,16,24,21,28,16,16,13,6,6,4,4,5,3,6,4,3,1,13,5,5,3,5,1,1,1,22
+];
 
 const NOMES_LIVROS = [
   "Gênesis","Êxodo","Levítico","Números","Deuteronômio","Josué","Juízes","Rute",
@@ -99,6 +34,28 @@ const NOMES_LIVROS = [
   "Colossenses","1 Tessalonicenses","2 Tessalonicenses","1 Timóteo","2 Timóteo","Tito",
   "Filêmon","Hebreus","Tiago","1 Pedro","2 Pedro","1 João","2 João","3 João","Judas","Apocalipse"
 ];
+
+const LIVROS_MAP = {
+  "gn":0,"gênesis":0,"genesis":0,"ex":1,"êxodo":1,"exodo":1,"lv":2,"levítico":2,"levitico":2,
+  "nm":3,"números":3,"numeros":3,"dt":4,"deuteronômio":4,"deuteronomio":4,"js":5,"josué":5,"josue":5,
+  "jz":6,"juízes":6,"juizes":6,"rt":7,"rute":7,"1sm":8,"1samuel":8,"2sm":9,"2samuel":9,
+  "1rs":10,"1reis":10,"2rs":11,"2reis":11,"1cr":12,"1crônicas":12,"2cr":13,"2crônicas":13,
+  "ed":14,"esdras":14,"ne":15,"neemias":15,"et":16,"ester":16,"jó":17,"jo":17,"job":17,"sl":18,
+  "salmos":18,"sal":18,"pv":19,"provérbios":19,"proverbios":19,"ec":20,"eclesiastes":20,
+  "ct":21,"cânticos":21,"canticos":21,"is":22,"isaías":22,"isaias":22,"jr":23,"jeremias":23,
+  "lm":24,"lamentações":24,"lamentacoes":24,"ez":25,"ezequiel":25,"dn":26,"daniel":26,
+  "os":27,"oséias":27,"oseias":27,"jl":28,"joel":28,"am":29,"amós":29,"amos":29,"ob":30,"obadias":30,
+  "jn":31,"jonas":31,"mq":32,"miquéias":32,"miqueias":32,"na":33,"naum":33,"hc":34,"habacuque":34,
+  "sf":35,"sofonias":35,"ag":36,"ageu":36,"zc":37,"zacarias":37,"ml":38,"malaquias":38,
+  "mt":39,"mateus":39,"mc":40,"marcos":40,"lc":41,"lucas":41,"joão":42,"joao":42,"at":43,"atos":43,
+  "rm":44,"romanos":44,"1co":45,"1coríntios":45,"1corintios":45,"2co":46,"2coríntios":46,"2corintios":46,
+  "gl":47,"gálatas":47,"galatas":47,"ef":48,"efésios":48,"efesios":48,"fp":49,"filipenses":49,
+  "cl":50,"colossenses":50,"1ts":51,"1tessalonicenses":51,"2ts":52,"2tessalonicenses":52,
+  "1tm":53,"1timóteo":53,"1timoteo":53,"2tm":54,"2timóteo":54,"2timoteo":54,"tt":55,"tito":55,
+  "fm":56,"filemon":56,"hb":57,"hebreus":57,"tg":58,"tiago":58,"1pe":59,"1pedro":59,
+  "2pe":60,"2pedro":60,"1jo":61,"1joão":61,"1joao":61,"2jo":62,"2joão":62,"2joao":62,
+  "3jo":63,"3joão":63,"3joao":63,"jd":64,"judas":64,"ap":65,"apocalipse":65,
+};
 
 const URLS = {
   NVI:"https://raw.githubusercontent.com/thiagobodruk/biblia/master/json/nvi.json",
@@ -122,22 +79,15 @@ function StrongWord({ word }) {
   if (!d) return <span>{word}</span>;
   return (
     <span style={{position:"relative",display:"inline"}}>
-      <span
-        onMouseEnter={()=>setOpen(true)}
-        onMouseLeave={()=>setOpen(false)}
-        style={{borderBottom:"1.5px dashed var(--gold,#B8912A)",cursor:"pointer",color:"inherit"}}
-      >{word}</span>
+      <span onMouseEnter={()=>setOpen(true)} onMouseLeave={()=>setOpen(false)}
+        style={{borderBottom:"1.5px dashed #B8912A",cursor:"pointer",color:"inherit"}}>
+        {word}
+      </span>
       {open && (
-        <span style={{
-          position:"fixed",top:"auto",
-          width:270,background:"#fff",
-          border:"1px solid #E5E4DC",borderRadius:12,
-          padding:"12px 14px",zIndex:9999,
-          boxShadow:"0 8px 32px rgba(0,0,0,0.14)",
-          pointerEvents:"none",fontSize:13,lineHeight:1.5,
-          fontFamily:"'DM Sans',sans-serif",
-          transform:"translateX(-50%)",left:"50%",marginTop:6,
-        }}>
+        <span style={{position:"fixed",width:270,background:"#fff",border:"1px solid #E5E4DC",
+          borderRadius:12,padding:"12px 14px",zIndex:9999,boxShadow:"0 8px 32px rgba(0,0,0,0.14)",
+          pointerEvents:"none",fontSize:13,lineHeight:1.5,fontFamily:"'DM Sans',sans-serif",
+          transform:"translateX(-50%)",left:"50%",marginTop:6}}>
           <span style={{display:"block",fontSize:24,fontFamily:"serif",direction:"rtl",textAlign:"right",color:"#17160F",marginBottom:4}}>{d.heb}</span>
           <span style={{display:"inline-block",background:"rgba(184,145,42,0.1)",color:"#B8912A",fontSize:11,fontWeight:600,padding:"1px 7px",borderRadius:6,marginBottom:6}}>{d.h}</span>
           <div style={{display:"flex",justifyContent:"space-between",gap:6,marginBottom:4,paddingBottom:4,borderBottom:"1px solid #E5E4DC"}}>
@@ -173,13 +123,81 @@ function parseRef(q) {
   const norm = q.trim().toLowerCase()
     .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
     .replace(/[\s]+/g," ");
-  // Tentar "livro cap:ver" ou "livro cap.ver" ou "livro cap ver" ou "livro cap"
   const m = norm.match(/^(\d?\s?[a-z]+)\s*(\d+)[.:]?(\d*)/);
   if(!m) return null;
   const abrev = m[1].replace(/\s/g,"");
-  const idx = LIVROS[abrev];
+  const idx = LIVROS_MAP[abrev];
   if(idx === undefined) return null;
   return { idx, cap: parseInt(m[2]), ver: m[3] ? parseInt(m[3]) : null };
+}
+
+// Seletor de capítulos com quadradinhos
+function CapSelector({ bookIdx, ch, onChange }) {
+  const [open, setOpen] = useState(false);
+  const total = CAPS_POR_LIVRO[bookIdx] || 1;
+
+  return (
+    <div style={{position:"relative"}}>
+      <button
+        onClick={()=>setOpen(o=>!o)}
+        style={{
+          display:"flex",alignItems:"center",gap:6,
+          padding:"6px 12px",
+          border:"1.5px solid #E5E4DC",
+          borderRadius:8,background:"#F1F0EB",
+          cursor:"pointer",fontSize:13,fontWeight:600,
+          color:"#17160F",fontFamily:"sans-serif",
+          minWidth:90,justifyContent:"space-between",
+        }}>
+        <span>Cap. {ch}</span>
+        <span style={{fontSize:10,color:"#8A8980",transform:open?"rotate(180deg)":"rotate(0deg)",transition:"transform .2s"}}>▼</span>
+      </button>
+
+      {open && (
+        <>
+          {/* overlay para fechar */}
+          <div onClick={()=>setOpen(false)}
+            style={{position:"fixed",inset:0,zIndex:998}}/>
+          {/* painel de quadradinhos */}
+          <div style={{
+            position:"absolute",top:"calc(100% + 6px)",left:"50%",
+            transform:"translateX(-50%)",
+            background:"#fff",
+            border:"1.5px solid #E5E4DC",
+            borderRadius:12,
+            padding:"12px 10px",
+            zIndex:999,
+            boxShadow:"0 8px 32px rgba(0,0,0,0.14)",
+            width:260,
+          }}>
+            <div style={{fontSize:11,fontWeight:600,color:"#8A8980",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:8,textAlign:"center"}}>
+              {NOMES_LIVROS[bookIdx]} — {total} capítulos
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:4}}>
+              {Array.from({length:total},(_,i)=>i+1).map(n=>(
+                <button key={n} onClick={()=>{onChange(n);setOpen(false);}}
+                  style={{
+                    width:"100%",aspectRatio:"1",
+                    border:"1.5px solid",
+                    borderColor: ch===n ? "#B8912A" : "#E5E4DC",
+                    borderRadius:6,
+                    background: ch===n ? "#B8912A" : "#F1F0EB",
+                    color: ch===n ? "#fff" : "#17160F",
+                    fontSize:12,fontWeight: ch===n ? 700 : 400,
+                    cursor:"pointer",
+                    transition:"all .1s",
+                    fontFamily:"sans-serif",
+                    padding:0,
+                  }}>
+                  {n}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
 export default function Biblia() {
@@ -194,12 +212,6 @@ export default function Biblia() {
   const [totalCaps, setTotalCaps] = useState(1);
   const [erro, setErro] = useState("");
 
-  const QUICK = [
-    {l:"Gn 1",b:0,c:1},{l:"Jo 3",b:42,c:3},{l:"Sl 23",b:18,c:23},
-    {l:"Is 53",b:22,c:53},{l:"Rm 8",b:44,c:8},{l:"Ef 2",b:48,c:2},
-    {l:"Fp 4",b:49,c:4},{l:"Hb 11",b:57,c:11},{l:"Ap 21",b:65,c:21},
-  ];
-
   async function loadBible(v) {
     if(bibleCache[v]) return bibleCache[v];
     const r = await fetch(URLS[v]);
@@ -211,7 +223,7 @@ export default function Biblia() {
   async function loadChapter(v, bi, c, highlight=null) {
     if(v === "HEB") {
       if(bi===0 && c===1) { setVerses(HEB_GN1.map(x=>x.pt)); setTotalCaps(50); }
-      else { setVerses([]); setErro("Hebraica disponível para Gênesis 1. Mais capítulos em breve."); }
+      else { setVerses([]); setErro("Hebraica disponível para Gênesis 1 neste momento."); }
       return;
     }
     setLoading(true); setErro(""); setVerses([]);
@@ -219,7 +231,8 @@ export default function Biblia() {
       const bible = await loadBible(v);
       const book = bible[bi];
       if(!book) { setErro("Livro não encontrado."); setLoading(false); return; }
-      setTotalCaps(book.chapters.length);
+      const caps = book.chapters?.length || CAPS_POR_LIVRO[bi];
+      setTotalCaps(caps);
       const chapter = book.chapters[c-1];
       if(!chapter) { setErro("Capítulo não encontrado."); setLoading(false); return; }
       setVerses(chapter);
@@ -237,8 +250,9 @@ export default function Biblia() {
     if(r) {
       setBookIdx(r.idx); setCh(r.cap);
       if(r.ver) setDestVer(r.ver);
+      setErro("");
     } else {
-      setErro("Referência não reconhecida. Ex: João 3, Sl 23, Rm 8.28");
+      setErro("Referência não reconhecida. Ex: João 3.16, Sl 23, Rm 8.28");
     }
   }
 
@@ -247,16 +261,21 @@ export default function Biblia() {
       setTimeout(()=>{
         const el = document.getElementById("ver-"+destVer);
         if(el) el.scrollIntoView({behavior:"smooth",block:"center"});
-      }, 300);
+      }, 400);
     }
   },[destVer, verses]);
 
   const verLabel = ver==="HEB"?"Hebraica":ver;
-  const VERS = [{c:"NVI",l:"NVI",d:"Nova Versão Internacional"},{c:"ARA",l:"ARA",d:"Almeida Revista e Atualizada"},{c:"ACF",l:"ACF",d:"Almeida Corrigida Fiel"},{c:"HEB",l:"Hebraica",d:"Tanakh WLC"}];
+  const VERS = [
+    {c:"NVI",l:"NVI",d:"Nova Versão Internacional"},
+    {c:"ARA",l:"ARA",d:"Almeida Revista e Atualizada"},
+    {c:"ACF",l:"ACF",d:"Almeida Corrigida Fiel"},
+    {c:"HEB",l:"Hebraica",d:"Tanakh WLC"},
+  ];
 
   return (
     <div style={{padding:"0 4px"}}>
-      {/* Top */}
+      {/* Topo */}
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
         <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:20,fontWeight:700,color:"var(--ink)"}}>Bíblia</span>
         <div style={{position:"relative"}}>
@@ -286,47 +305,29 @@ export default function Biblia() {
       </div>
 
       {/* Busca */}
-      <div className="biblia-search" style={{marginBottom:10}}>
-        <input
-          value={search}
-          onChange={e=>{setSearch(e.target.value);setErro("");}}
+      <div className="biblia-search" style={{marginBottom:12}}>
+        <input value={search} onChange={e=>{setSearch(e.target.value);setErro("");}}
           onKeyDown={e=>e.key==="Enter"&&doSearch()}
-          placeholder="Ex: João 3.16 · Salmos 23 · Romanos 8.28 · Apocalipse 21..."
-        />
+          placeholder="Ex: João 3.16 · Salmos 23 · Romanos 8.28 · Apocalipse 21..."/>
         <button onClick={doSearch}>Buscar</button>
       </div>
 
-      {/* Acesso rápido */}
-      <div className="refbar" style={{marginBottom:10}}>
-        {QUICK.map((r,i)=>(
-          <span key={i} className={`rc${bookIdx===r.b&&ch===r.c?" active":""}`}
-            onClick={()=>{setBookIdx(r.b);setCh(r.c);setSearch("");}}>
-            {r.l}
-          </span>
-        ))}
-      </div>
-
-      {/* Navegação livro/capítulo */}
+      {/* Seletor livro + capítulos */}
       <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12,flexWrap:"wrap"}}>
-        <select
-          value={bookIdx}
-          onChange={e=>{setBookIdx(+e.target.value);setCh(1);}}
-          style={{flex:1,minWidth:140,padding:"6px 10px",border:"1.5px solid var(--border)",borderRadius:8,background:"var(--surface)",color:"var(--ink)",fontSize:13,fontFamily:"'DM Sans',sans-serif",cursor:"pointer"}}
-        >
+        <select value={bookIdx} onChange={e=>{setBookIdx(+e.target.value);setCh(1);}}
+          style={{flex:1,minWidth:140,padding:"7px 10px",border:"1.5px solid #E5E4DC",
+            borderRadius:8,background:"#F1F0EB",color:"#17160F",fontSize:13,
+            fontFamily:"'DM Sans',sans-serif",cursor:"pointer"}}>
           {NOMES_LIVROS.map((n,i)=><option key={i} value={i}>{n}</option>)}
         </select>
-        <div style={{display:"flex",alignItems:"center",gap:4}}>
-          <button onClick={()=>setCh(c=>Math.max(1,c-1))} disabled={ch<=1}
-            style={{width:32,height:32,borderRadius:8,border:"1.5px solid var(--border)",background:"var(--surface)",cursor:ch<=1?"not-allowed":"pointer",opacity:ch<=1?0.4:1,fontSize:14,display:"flex",alignItems:"center",justifyContent:"center",color:"var(--ink)"}}>‹</button>
-          <span style={{fontSize:13,fontWeight:600,color:"var(--ink)",minWidth:60,textAlign:"center"}}>Cap. {ch}</span>
-          <button onClick={()=>setCh(c=>Math.min(totalCaps,c+1))} disabled={ch>=totalCaps}
-            style={{width:32,height:32,borderRadius:8,border:"1.5px solid var(--border)",background:"var(--surface)",cursor:ch>=totalCaps?"not-allowed":"pointer",opacity:ch>=totalCaps?0.4:1,fontSize:14,display:"flex",alignItems:"center",justifyContent:"center",color:"var(--ink)"}}>›</button>
-        </div>
+
+        {/* Seletor de capítulo com quadradinhos */}
+        <CapSelector bookIdx={bookIdx} ch={ch} onChange={setCh}/>
       </div>
 
       {/* Hint Strong */}
-      {ver !== "HEB" && (
-        <div style={{fontSize:11,color:"var(--muted)",marginBottom:10,fontStyle:"italic"}}>
+      {ver !== "HEB" && verses.length > 0 && (
+        <div style={{fontSize:11,color:"#8A8980",marginBottom:10,fontStyle:"italic"}}>
           ✦ Passe o mouse nas palavras sublinhadas para ver o hebraico original
         </div>
       )}
@@ -335,9 +336,7 @@ export default function Biblia() {
       {erro && <div style={{fontSize:13,color:"#E24B4A",marginBottom:10,padding:"8px 12px",background:"#FCEBEB",borderRadius:8}}>{erro}</div>}
 
       {/* Loading */}
-      {loading && (
-        <div className="biblia-loading"><div className="ring"/><p>Carregando {NOMES_LIVROS[bookIdx]}...</p></div>
-      )}
+      {loading && <div className="biblia-loading"><div className="ring"/><p>Carregando {NOMES_LIVROS[bookIdx]}...</p></div>}
 
       {/* Hebraica */}
       {!loading && ver==="HEB" && (
@@ -356,7 +355,7 @@ export default function Biblia() {
         </div>
       )}
 
-      {/* Passagem normal */}
+      {/* Passagem */}
       {!loading && ver!=="HEB" && verses.length > 0 && (
         <div className="passage">
           <div className="passage-ref">{NOMES_LIVROS[bookIdx]} {ch} · {ver}</div>
@@ -367,8 +366,7 @@ export default function Biblia() {
               padding: destVer===i+1 ? "4px 8px":"0",
               transition:"background 0.5s",
             }}>
-              <sup className="vnum">{i+1}</sup>
-              {renderStrong(v)}
+              <sup className="vnum">{i+1}</sup>{renderStrong(v)}
             </p>
           ))}
         </div>
