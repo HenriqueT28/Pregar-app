@@ -529,7 +529,7 @@ export default function App() {
           {page==="esboco" && <Outline showToast={showToast}/>}
           {page==="biblia" && <div className="page"><Biblia/></div>}
           {page==="devocional" && <div className="page"><Devocional/></div>}
-          {page==="estudo" && <div className="page"><Estudo/></div>div>}</div>
+                    {page==="estudo" && <div className="page"><Estudo/></div>}
           {page==="comoestou" && <div className="page"><ComoEstou/></div>}
           {page==="saved" && selSave && (
             <div className="page">
