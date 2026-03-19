@@ -221,14 +221,14 @@ REGRAS ABSOLUTAS:
 
 // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ SUGGESTIONS ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
 function Suggestions({ onSelect }) {
-  const list = [
-    ["Ansiedade","Fp 4.6-7"],["PropÃÂÃÂÃÂÃÂ³sito de vida","Jr 29.11"],["PerdÃÂÃÂÃÂÃÂ£o","Mt 18.21-22"],
-    ["FamÃÂÃÂÃÂÃÂ­lia","Js 24.15"],["Identidade em Cristo","Gl 2.20"],["FÃÂÃÂÃÂÃÂ© e dÃÂÃÂÃÂÃÂºvida","Mc 9.24"],
+    const list = [
+    ["Ansiedade","Fp 4.6-7"],["Propósito de vida","Jr 29.11"],["Perdão","Mt 18.21-22"],
+    ["Família","Js 24.15"],["Identidade em Cristo","Gl 2.20"],["Fé e dúvida","Mc 9.24"],
     ["Dinheiro e generosidade","Ml 3.10"],["Relacionamentos","1Co 13"],
-    ["Sofrimento","Rm 8.28"],["Morte e ressurreiÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o","Jo 11.25"],
-    ["Batalha espiritual","Ef 6.10-18"],["GraÃÂÃÂÃÂÃÂ§a","Ef 2.8-9"],
-    ["OraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o","Mt 6.9-13"],["Pecado e redenÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o","Is 1.18"],
-    ["EsperanÃÂÃÂÃÂÃÂ§a","Rm 15.13"],["ServiÃÂÃÂÃÂÃÂ§o e vocaÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o","Cl 3.23-24"],
+    ["Sofrimento","Rm 8.28"],["Morte e ressurreição","Jo 11.25"],
+    ["Batalha espiritual","Ef 6.10-18"],["Graça","Ef 2.8-9"],
+    ["Oração","Mt 6.9-13"],["Pecado e redenção","Is 1.18"],
+    ["Esperança","Rm 15.13"],["Serviço e vocação","Cl 3.23-24"],
   ];
   return (
     <div className="chips">
