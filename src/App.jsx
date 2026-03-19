@@ -53,7 +53,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 .loader p{font-size:12.5px;color:var(--muted);text-align:center;max-width:200px;line-height:1.6}
 @keyframes spin{to{transform:rotate(360deg)}}
 .out{margin-top:24px;animation:fu 0.5s ease both}
-.otag{display:inline-block;font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);background:var(--gold-bg);padding:3px 10px;border-radius:100px;margin-bottom:7px}
+.otag{display:inline-block;font-size:10px;font-weigh:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);background:var(--gold-bg);padding:3px 10px;border-radius:100px;margin-bottom:7px}
 .otitle{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;line-height:1.15;margin-bottom:4px}
 .oref{font-size:14px;color:var(--muted);font-style:italic}
 .obody{background:var(--surface);border-radius:12px;padding:28px;font-size:14px;line-height:2;color:var(--ink2);white-space:pre-wrap;word-break:break-word;margin-top:16px}
@@ -265,7 +265,22 @@ function ThemeSugg({ showToast }) {
         </div>
       )}
     </div>
+<<<<<<< HEAD
+  );
+}
+  const [cat, setCat] = useState(""); const [loading, setLoading] = useState(false); const [items, setItems] = useState([]);
+  const cats = ["Família","Jovens","Páscoa","Natal","Evangelismo","Crise","Identidade","Missões","Batismo","Casamento"];
+  async function gen() {
+    if(!cat) return; setLoading(true); setItems([]);
+    try {
+      const r = await aiJSON(PS, `Liste 8 temas de sermão únicos e poderosos para: ${cat}. Formato: [{"tema":"...","ref":"...","gancho":"frase de abertura impactante"}]`, 800);
+      if(r) setItems(r);
+    } catch(e) { showToast("Erro: "+e.message); }
+    setLoading(false);
+  }
+=======
   
+>>>>>>> 4084e5621958970516b9563bf8b18821b7a8540e
 function VerseSearch({ showToast }) {
   const [q, setQ] = useState(""); const [loading, setLoading] = useState(false); const [res, setRes] = useState([]);
   async function search() {
@@ -277,7 +292,7 @@ function VerseSearch({ showToast }) {
     setLoading(false);
   }
   return (
-    <div className="page">
+    <div className="page
       <div className="f" style={{display:"grid",gap:12}}>
         <div style={{display:"grid",gap:4}}><label>Buscar versículos</label>
           <input value={q} onChange={e=>setQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&search()} placeholder="Ex: ansiedade, perdão, cura, esperança..."/>
